@@ -8,8 +8,8 @@ public class User
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
-    public string Password { get; set; }
-    public string InitialBalance { get; set; }
+    public string PasswordHash { get; set; }
+    public decimal  InitialBalance { get; set; }
 
     public List<Transaction> Transactions { get; set; } = new List<Transaction>();
 
@@ -32,8 +32,5 @@ public class User
         return Transactions.ToList();
     }
 
-    public decimal GetBalance()
-    {
-        return Transactions.Sum(m => m.Type == TransactionType.Income ? m.Amount : -m.Amount);
-    }
+   
 }
