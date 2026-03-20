@@ -15,15 +15,32 @@ using System.Windows.Shapes;
 
 namespace SmartSaving.Views
 {
-    /// <summary>
+
     /// Lógica de interacción para RegisterWindow.xaml
-    /// </summary>
+
     public partial class RegisterWindow : Window
     {
-        public RegisterWindow()
+        public RegisterWindow(RegisterViewModel viewModel)
         {
             InitializeComponent();
-            this.DataContext = new RegisterViewModel();
+            DataContext = viewModel;
         }
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is RegisterViewModel vm)
+            {
+                vm.Password = ((PasswordBox)sender).Password;
+            }
+        }
+
+        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is RegisterViewModel vm)
+            {
+                vm.ConfirmPassword = ((PasswordBox)sender).Password;
+            }
+        }
+
     }
+
 }

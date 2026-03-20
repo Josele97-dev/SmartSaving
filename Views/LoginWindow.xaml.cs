@@ -15,15 +15,23 @@ using System.Windows.Shapes;
 
 namespace SmartSaving.Views
 {
-    /// <summary>
+
     /// Lógica de interacción para LoginWindow.xaml
-    /// </summary>
+
     public partial class LoginWindow : Window
     {
-        public LoginWindow()
+        public LoginWindow(LoginViewModel viewModel)
         {
             InitializeComponent();
-            this.DataContext = new LoginViewModel();
+            DataContext = viewModel;
+        }
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LoginViewModel vm)
+            {
+                vm.Password = ((PasswordBox)sender).Password;
+            }
         }
     }
+
 }

@@ -14,14 +14,13 @@ using System.Windows.Shapes;
 
 namespace SmartSaving.Views
 {
-    /// <summary>
     /// Lógica de interacción para TransactionWindow.xaml
-    /// </summary>
     public partial class TransactionWindow : Window
     {
-        public TransactionWindow()
+        public TransactionWindow(TransactionViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }

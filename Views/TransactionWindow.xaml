@@ -9,93 +9,22 @@
     <Grid Margin="20">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <Border Background="#334155" CornerRadius="12" Padding="20">
-                <StackPanel VerticalAlignment="Center">
+				<StackPanel>
 
-                    <!-- Título -->
-                    <TextBlock Text="Nuevo Movimiento"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               Foreground="#F1F5F9"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,20"/>
+					<TextBlock Text="Transaction Type" />
+					<ComboBox Margin="0,5,0,10"
+							  ItemsSource="{Binding TransactionTypes}"
+							  SelectedItem="{Binding SelectedTransactionType}" />
 
-                    <!-- Tipo -->
-                    <TextBlock Text="Tipo de movimiento" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="cmbTipo"
-                              Height="30"
-                              Margin="0,0,0,10"
-                              Background="#F8FAFC"
-                              BorderThickness="0"
-                              SelectedIndex="0">
-                        <ComboBoxItem Content="Selecciona tipo..." IsEnabled="False"/>
-                        <ComboBoxItem Content="Ingreso"/>
-                        <ComboBoxItem Content="Gasto"/>
-                    </ComboBox>
+					<TextBlock Text="Amount" />
+					<TextBox Margin="0,5,0,20"
+							 Text="{Binding Amount}" />
 
-                    <!-- Cantidad -->
-                    <TextBlock Text="Cantidad" Foreground="#E2E8F0" Margin="0,0,0,5"/>
+					<Button Content="Save"
+							Height="35"
+							Command="{Binding SaveTransactionCommand}" />
 
-                    <Grid Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="40"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBox x:Name="txtCantidad"
-                                 Height="30"
-                                 Padding="5"
-                                 Background="#F8FAFC"
-                                 BorderThickness="0"
-                                 Grid.Column="0"/>
-
-                        <Border Grid.Column="1"
-                                Background="#E2E8F0"
-                                CornerRadius="0,4,4,0">
-                            <TextBlock Text="€"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       FontWeight="Bold"
-                                       Foreground="#1E293B"/>
-                        </Border>
-                    </Grid>
-
-                    <!-- Categoría -->
-                    <TextBlock Text="Categoría" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtCategoria"
-                             Height="30"
-                             Margin="0,0,0,10"
-                             Padding="5"
-                             Background="#F8FAFC"
-                             BorderThickness="0"/>
-
-                    <!-- Descripción -->
-                    <TextBlock Text="Descripción" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtDescripcion"
-                             Height="60"
-                             Margin="0,0,0,10"
-                             Padding="5"
-                             Background="#F8FAFC"
-                             BorderThickness="0"
-                             TextWrapping="Wrap"
-                             AcceptsReturn="True"/>
-
-                    <!-- Fecha -->
-                    <TextBlock Text="Fecha" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-                    <DatePicker x:Name="dpFecha"
-                                Height="30"
-                                Margin="0,0,0,20"
-                                Background="#F8FAFC"
-                                BorderThickness="0"/>
-
-                    <!-- Botón -->
-                    <Button Content="Guardar Movimiento"
-                            Height="35"
-                            Background="#6366F1"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            Cursor="Hand"/>
-
-                </StackPanel>
+				</StackPanel>
             </Border>
         </ScrollViewer>
     </Grid>

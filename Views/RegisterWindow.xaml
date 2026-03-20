@@ -20,31 +20,20 @@
                                Margin="0,0,0,20"/>
 
                     <!-- Nombre -->
-                    <TextBlock Text="Nombre" Foreground="White" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtNombre" Height="30" Margin="0,0,0,10"
-                             Padding="5" Background="#FFECF0F1" />
+					<TextBlock Text="Username" />
+					<TextBox Text="{Binding Username}" Margin="0,5,0,10"/>
 
-                    <!-- Apellidos -->
-                    <TextBlock Text="Apellidos" Foreground="White" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtApellidos" Height="30" Margin="0,0,0,10"
-                             Padding="5" Background="#FFECF0F1" />
+					<TextBlock Text="Password" />
+					<PasswordBox Margin="0,5,0,10"
+								 PasswordChanged="PasswordBox_PasswordChanged"/>
 
-                    <!-- Email -->
-                    <TextBlock Text="Email" Foreground="White" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtEmail" Height="30" Margin="0,0,0,10"
-                             Padding="5" Background="#FFECF0F1" />
+					<TextBlock Text="Confirm Password" />
+					<PasswordBox Margin="0,5,0,20"
+								 PasswordChanged="ConfirmPasswordBox_PasswordChanged"/>
 
-                    <!-- Contraseña -->
-                    <TextBlock Text="Contraseña" Foreground="White" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtPassword" Height="30" Margin="0,0,0,20"
-                                 Padding="5" Background="#FFECF0F1" />
-                    
-                    
-
-                    <!-- Botón Crear Cuenta -->
-                    <Button Content="Crear Cuenta" Height="35" Background="#FF1ABC9C"
-                            Foreground="White" FontWeight="Bold"
-                            Cursor="Hand"/>
+					<Button Content="Register"
+							Height="35"
+							Command="{Binding RegisterCommand}" />
                    
 
                 </StackPanel>

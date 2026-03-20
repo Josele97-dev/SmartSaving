@@ -22,20 +22,19 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,20"/>
 
-                    <!-- Email -->
-                    <TextBlock Text="Email" Foreground="White" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtEmail" Height="30" Margin="0,0,0,10"
-                             Padding="5" Background="#FFECF0F1" />
+                   <TextBlock Text="Email" />
+                   <TextBox Height="30"
+                     Margin="0,5,0,10"
+                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <!-- Contraseña -->
-                    <TextBlock Text="Contraseña" Foreground="White" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtPassword" Height="30" Margin="0,0,0,20"
-                                 Padding="5" Background="#FFECF0F1" />
+                   <TextBlock Text="Password" />
+                   <PasswordBox Height="30"
+                         Margin="0,5,0,20"
+                         PasswordChanged="PasswordBox_PasswordChanged"/>
 
-                    <!-- Botón Login -->
-                    <Button Content="Iniciar Sesión" Height="35" Background="#FF1ABC9C"
-                            Foreground="White" FontWeight="Bold"
-                            Cursor="Hand"/>
+                    <Button Content="Login"
+                    Height="35"
+                    Command="{Binding LoginCommand}" />
 
                     <!-- Crear cuenta -->
                     <TextBlock Text="Crear cuenta" Foreground="#FF3498DB" 
