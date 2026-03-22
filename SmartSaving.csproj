@@ -9,15 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Logo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Logo.png" />
+    <Folder Include="Assets\" />
   </ItemGroup>
 
 </Project>

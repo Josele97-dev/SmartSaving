@@ -8,18 +8,53 @@ using System.Windows.Input;
 
 namespace SmartSaving.ViewModels
 {
-    public class TransactionViewModel
+    public class TransactionViewModel : BaseViewModel
     {
         private readonly TransactionService _transactionService;
         private readonly int _userId;
         private Transaction _existingTransaction;
 
-        public string Description { get; set; }
-        public decimal Amount { get; set; }
-        public DateTime Date { get; set; } = DateTime.Now;
-        public string Category { get; set; }
-        public TransactionType Type { get; set; }
-        public int CategoryId { get; set; }
+        private string _description;
+        public string Description
+        {
+            get => _description;
+            set { _description = value; OnPropertyChanged(); }
+        }
+
+        private decimal _amount;
+        public decimal Amount
+        {
+            get => _amount;
+            set { _amount = value; OnPropertyChanged(); }
+        }
+
+        private DateTime _date = DateTime.Now;
+        public DateTime Date
+        {
+            get => _date;
+            set { _date = value; OnPropertyChanged(); }
+        }
+
+        private TransactionType _type;
+        public TransactionType Type
+        {
+            get => _type;
+            set { _type = value; OnPropertyChanged(); }
+        }
+
+        private string _category;
+        public string Category
+        {
+            get => _category;
+            set { _category = value; OnPropertyChanged(); }
+        }
+
+        private int _categoryId;
+        public int CategoryId
+        {
+            get => _categoryId;
+            set { _categoryId = value; OnPropertyChanged(); }
+        }
 
         public List<TransactionType> Types { get; } = new List<TransactionType>
         {
@@ -47,7 +82,6 @@ namespace SmartSaving.ViewModels
             _userId = userId;
             _existingTransaction = transaction;
 
-            // Cargar datos existentes
             Description = transaction.Description;
             Amount = transaction.Amount;
             Date = transaction.Date;
