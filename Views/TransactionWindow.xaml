@@ -21,33 +21,26 @@
 
                     <!-- Tipo -->
                     <TextBlock Text="Tipo de movimiento" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="cmbTipo"
-                              Height="30"
+                    <ComboBox Height="30"
                               Margin="0,0,0,10"
                               Background="#F8FAFC"
                               BorderThickness="0"
-                              SelectedIndex="0">
-                        <ComboBoxItem Content="Selecciona tipo..." IsEnabled="False"/>
-                        <ComboBoxItem Content="Ingreso"/>
-                        <ComboBoxItem Content="Gasto"/>
-                    </ComboBox>
+                              ItemsSource="{Binding Types}"
+                              SelectedItem="{Binding Type}"/>
 
                     <!-- Cantidad -->
                     <TextBlock Text="Cantidad" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="40"/>
                         </Grid.ColumnDefinitions>
-
-                        <TextBox x:Name="txtCantidad"
-                                 Height="30"
+                        <TextBox Height="30"
                                  Padding="5"
                                  Background="#F8FAFC"
                                  BorderThickness="0"
-                                 Grid.Column="0"/>
-
+                                 Grid.Column="0"
+                                 Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"/>
                         <Border Grid.Column="1"
                                 Background="#E2E8F0"
                                 CornerRadius="0,4,4,0">
@@ -61,31 +54,31 @@
 
                     <!-- Categoría -->
                     <TextBlock Text="Categoría" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtCategoria"
-                             Height="30"
+                    <TextBox Height="30"
                              Margin="0,0,0,10"
                              Padding="5"
                              Background="#F8FAFC"
-                             BorderThickness="0"/>
+                             BorderThickness="0"
+                             Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <!-- Descripción -->
                     <TextBlock Text="Descripción" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtDescripcion"
-                             Height="60"
+                    <TextBox Height="60"
                              Margin="0,0,0,10"
                              Padding="5"
                              Background="#F8FAFC"
                              BorderThickness="0"
                              TextWrapping="Wrap"
-                             AcceptsReturn="True"/>
+                             AcceptsReturn="True"
+                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <!-- Fecha -->
                     <TextBlock Text="Fecha" Foreground="#E2E8F0" Margin="0,0,0,5"/>
-                    <DatePicker x:Name="dpFecha"
-                                Height="30"
+                    <DatePicker Height="30"
                                 Margin="0,0,0,20"
                                 Background="#F8FAFC"
-                                BorderThickness="0"/>
+                                BorderThickness="0"
+                                SelectedDate="{Binding Date}"/>
 
                     <!-- Botón -->
                     <Button Content="Guardar Movimiento"
@@ -93,7 +86,8 @@
                             Background="#6366F1"
                             Foreground="White"
                             FontWeight="Bold"
-                            Cursor="Hand"/>
+                            Cursor="Hand"
+                            Command="{Binding SaveCommand}"/>
 
                 </StackPanel>
             </Border>

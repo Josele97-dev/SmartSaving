@@ -1,70 +1,84 @@
+using SmartSaving.Repositories;
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SmartSaving.Services
 {
     public class TransactionService
     {
-        private readonly User _user;
+        private readonly ITransactionRepository _repository;
 
-        public TransactionService(User user)
+        public TransactionService(ITransactionRepository repository)
         {
-            _user = user ?? throw new ArgumentNullException(nameof(user));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public void AddTransaction(Transaction Transaction)
+        public async Task AddTransactionAsync(Transaction transaction)
         {
-            if (Transaction == null)
-                throw new ArgumentNullException(nameof(Transaction));
-
-            if (string.IsNullOrWhiteSpace(Transaction.Description))
-                throw new ArgumentException("Description is required.");
-
-            if (Transaction.Amount == 0)
-                throw new ArgumentException("Amount cannot be 0.");
-
-            if (Transaction.Date > DateTime.Now)
-                throw new ArgumentException("Date cannot be in the future.");
-
-            _user.Transactions.Add(Transaction);
+            if (transaction == null)
+                throw new ArgumentNullException(nameof(transaction));
+            if (string.IsNullOrWhiteSpace(transaction.Description))
+                throw new ArgumentException("Es necesaria una descripción");
+            if (transaction.Amount == 0)
+                throw new ArgumentException("La cantidad no puede ser 0");
+            if (transaction.Date > DateTime.Now)
+                throw new ArgumentException("La fecha no puede ser futura");
+            await _repository.AddAsync(transaction);
         }
 
-        public bool DeleteTransaction(int id)
+        public async Task<bool> DeleteTransactionAsync(int id)
         {
-            var mov = _user.Transactions.FirstOrDefault(m => m.Id == id);
-
-            if (mov == null)
+            var transaction = await _repository.GetByIdAsync(id);
+            if (transaction == null)
                 return false;
-
-            _user.Transactions.Remove(mov);
+            await _repository.DeleteAsync(id);
             return true;
         }
 
-        public void UpdateTransaction(Transaction updatedTransaction)
+        public async Task UpdateTransactionAsync(Transaction updatedTransaction)
         {
             if (updatedTransaction == null)
                 throw new ArgumentNullException(nameof(updatedTransaction));
-
-            var mov = _user.Transactions
-                .FirstOrDefault(m => m.Id == updatedTransaction.Id);
-
-            if (mov == null)
-                throw new InvalidOperationException("Transaction not found.");
-
             if (string.IsNullOrWhiteSpace(updatedTransaction.Description))
-                throw new ArgumentException("Description is required.");
-
+                throw new ArgumentException("Es necesaria una descripción");
             if (updatedTransaction.Amount == 0)
-                throw new ArgumentException("Amount cannot be 0.");
-
+                throw new ArgumentException("La cantidad no puede ser 0");
             if (updatedTransaction.Date > DateTime.Now)
-                throw new ArgumentException("Date cannot be in the future.");
+                throw new ArgumentException("La fecha no puede ser futura");
+            var existing = await _repository.GetByIdAsync(updatedTransaction.Id);
+            if (existing == null)
+                throw new InvalidOperationException("Transacción no encontrada");
+            await _repository.UpdateAsync(updatedTransaction);
+        }
 
-            mov.Description = updatedTransaction.Description;
-            mov.Amount = updatedTransaction.Amount;
-            mov.Date = updatedTransaction.Date;
-            mov.Type = updatedTransaction.Type;
-            mov.Category = updatedTransaction.Category;
+        public async Task<List<Transaction>> GetAllTransactionsAsync(int userId)
+        {
+            return await _repository.GetAllByUserAsync(userId);
+        }
+
+        public async Task<List<Transaction>> GetIncomesAsync(int userId)
+        {
+            return await _repository.GetByTypeAsync(userId, TransactionType.Income);
+        }
+
+        public async Task<List<Transaction>> GetExpensesAsync(int userId)
+        {
+            return await _repository.GetByTypeAsync(userId, TransactionType.Expense);
+        }
+
+        public async Task<decimal> GetBalanceAsync(int userId)
+        {
+            var transactions = await _repository.GetAllByUserAsync(userId);
+            decimal balance = 0;
+            foreach (var t in transactions)
+            {
+                if (t.Type == TransactionType.Income)
+                    balance += t.Amount;
+                else
+                    balance -= t.Amount;
+            }
+            return balance;
         }
     }
 }

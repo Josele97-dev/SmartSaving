@@ -5,15 +5,11 @@
         WindowStartupLocation="CenterScreen"
         Background="#FF2C3E50"
         ResizeMode="NoResize"
-        SizeToContent="Height"
->
-
+        SizeToContent="Height">
     <Grid Margin="20">
-        <!-- ScrollViewer -->
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <Border Background="#FF34495E" CornerRadius="10" Padding="20">
                 <StackPanel VerticalAlignment="Center">
-
                     <!-- Título -->
                     <TextBlock Text="Bienvenido" 
                                FontSize="24" 
@@ -21,26 +17,42 @@
                                Foreground="White" 
                                HorizontalAlignment="Center"
                                Margin="0,0,0,20"/>
-
                     <!-- Email -->
                     <TextBlock Text="Email" Foreground="White" Margin="0,0,0,5"/>
                     <TextBox x:Name="txtEmail" Height="30" Margin="0,0,0,10"
-                             Padding="5" Background="#FFECF0F1" />
-
+                             Padding="5" Background="#FFECF0F1"
+                             Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
                     <!-- Contraseña -->
                     <TextBlock Text="Contraseña" Foreground="White" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtPassword" Height="30" Margin="0,0,0,20"
-                                 Padding="5" Background="#FFECF0F1" />
-
+                    <PasswordBox x:Name="txtPassword"
+                                 Height="30"
+                                 Margin="0,0,0,10"
+                                 Padding="5"
+                                 Background="#FFECF0F1"
+                                 PasswordChanged="PasswordBox_PasswordChanged" />
+                    <TextBox x:Name="txtPasswordVisible"
+                             Height="30"
+                             Margin="0,0,0,10"
+                             Padding="5"
+                             Background="#FFECF0F1"
+                             Visibility="Collapsed"
+                             TextChanged="txtPasswordVisible_TextChanged"/>
+                    <!-- CheckBox para mostrar/ocultar contraseña -->
+                    <CheckBox Content="Mostrar contraseña"
+                              Foreground="White"
+                              Margin="0,0,0,20"
+                              Checked="ShowPassword_Checked"
+                              Unchecked="ShowPassword_Unchecked"/>
                     <!-- Botón Login -->
                     <Button Content="Iniciar Sesión" Height="35" Background="#FF1ABC9C"
                             Foreground="White" FontWeight="Bold"
-                            Cursor="Hand"/>
-
+                            Cursor="Hand"
+                            Command="{Binding LoginCommand}" />
                     <!-- Crear cuenta -->
                     <TextBlock Text="Crear cuenta" Foreground="#FF3498DB" 
-                               HorizontalAlignment="Center" Margin="0,15,0,0" 
-                               Cursor="Hand"/>
+                            HorizontalAlignment="Center" Margin="0,15,0,0" 
+                            Cursor="Hand"
+                            MouseLeftButtonUp="CrearCuenta_Click"/>
                 </StackPanel>
             </Border>
         </ScrollViewer>
