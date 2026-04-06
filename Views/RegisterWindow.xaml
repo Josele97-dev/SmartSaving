@@ -26,7 +26,7 @@
                                TextWrapping="Wrap"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,10"
-                               Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                               Visibility="Visible"/>
 
 					<!-- First Name -->
 					<TextBlock Text="First Name" Foreground="White" />

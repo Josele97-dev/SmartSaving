@@ -13,6 +13,7 @@ namespace SmartSaving.Repositories
             {
                 return await context.Users
                     .Include(u => u.Accounts)
+                    .ThenInclude(a => a.Categories)
                     .FirstOrDefaultAsync(u => u.Email == email);
             }
         }
@@ -23,6 +24,7 @@ namespace SmartSaving.Repositories
             {
                 return await context.Users
                     .Include(u => u.Accounts)
+                    .ThenInclude(a => a.Categories)
                     .FirstOrDefaultAsync(u => u.Id == id);
             }
         }

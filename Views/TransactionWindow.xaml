@@ -29,7 +29,7 @@
                                    TextWrapping="Wrap"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,10"
-                                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                                   Visibility="Visible"/>
 
 						<!-- Transaction Type -->
 						<TextBlock Text="Transaction Type" Foreground="White" />
@@ -62,15 +62,20 @@
 
 						<!-- Category (if categories are available) -->
 						<TextBlock Text="Category" Foreground="White" />
-						<ComboBox Margin="0,5,0,20"
-                                  Background="#FFECF0F1"
-                                  Padding="5"
-                                  ItemsSource="{Binding Categories}"
-                                  DisplayMemberPath="Title"
-                                  SelectedValuePath="Id"
-                                  SelectedValue="{Binding CategoryId}" />
+                        <ComboBox Margin="0,5,0,20"
+          Background="#FFECF0F1"
+          Padding="5"
+          ItemsSource="{Binding Categories}"
+          SelectedValuePath="Id"
+          SelectedValue="{Binding CategoryId}">
+                        <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                         <TextBlock Text="{Binding Title}" Foreground="Black"/>
+                        </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-						<!-- Save Button -->
+                        <!-- Save Button -->
 						<Button Content="Save"
                                 Height="35"
                                 Background="#FF1ABC9C"
