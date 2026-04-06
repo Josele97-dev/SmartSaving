@@ -1,36 +1,36 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public class User
+namespace SmartSaving.Models
 {
-    public int Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public string PasswordHash { get; set; }
-    public decimal  InitialBalance { get; set; }
-
-    public List<Transaction> Transactions { get; set; } = new List<Transaction>();
-
-    public List<Transaction> GetIncomes()
+    [Table("users")]
+    public class User
     {
-        return Transactions
-            .Where(m => m.Type == TransactionType.Income)
-            .ToList();
-    }
+        [Key]
+        [Column("user_ID")]
+        public int Id { get; set; }
 
-    public List<Transaction> GetExpenses()
-    {
-        return Transactions
-            .Where(m => m.Type == TransactionType.Expense)
-            .ToList();
-    }
+        [Column("username")]
+        public string Username { get; set; } = string.Empty;
 
-    public List<Transaction> GetAllTransactions()
-    {
-        return Transactions.ToList();
-    }
+        [Column("email")]
+        public string Email { get; set; } = string.Empty;
 
-   
+        [Column("password_hash")]
+        public string PasswordHash { get; set; } = string.Empty;
+
+        [Column("creation_date")]
+        public DateTime CreationDate { get; set; } = DateTime.Now;
+
+        [Column("first_name")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Column("last_name")]
+        public string LastName { get; set; } = string.Empty;
+
+        // Navigation property
+        public List<Account> Accounts { get; set; } = new List<Account>();
+    }
 }

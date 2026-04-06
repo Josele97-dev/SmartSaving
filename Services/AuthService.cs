@@ -1,28 +1,71 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
+using System.Threading.Tasks;
+using SmartSaving.Models;
+using SmartSaving.Repositories;
 
-public class AuthService : IAuthService
+namespace SmartSaving.Services
 {
-    private readonly List<User> _users = new List<User>();
-
-    public User Login(string email, string password)
+    public class AuthService : IAuthService
     {
-        return _users.FirstOrDefault(u =>
-            u.Email == email && u.PasswordHash == password);
-    }
+        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _accountRepository;
 
-    public User Register(string email, string password)
-    {
-        if (_users.Any(u => u.Email == email))
-            throw new Exception("User already exists");
-
-        var user = new User
+        public AuthService(IUserRepository userRepository, IAccountRepository accountRepository)
         {
-            Email = email,
-            PasswordHash = password // later: hash this
-        };
+            _userRepository = userRepository;
+            _accountRepository = accountRepository;
+        }
 
-        _users.Add(user);
-        return user;
+        public async Task<User?> LoginAsync(string email, string password)
+        {
+            var user = await _userRepository.GetByEmailAsync(email);
+
+            if (user == null)
+                return null;
+
+            // Verify the password against the stored BCrypt hash
+            bool isValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+
+            return isValid ? user : null;
+        }
+
+        public async Task<User?> RegisterAsync(string email, string password, string firstName, string lastName)
+        {
+            // Check if a user with this email already exists
+            var existingUser = await _userRepository.GetByEmailAsync(email);
+            if (existingUser != null)
+                return null;
+
+            // Hash the password with BCrypt
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+
+            var user = new User
+            {
+                Username = email,
+                Email = email,
+                PasswordHash = passwordHash,
+                FirstName = firstName,
+                LastName = lastName,
+                CreationDate = DateTime.Now
+            };
+
+            bool registered = await _userRepository.RegisterAsync(user);
+
+            if (!registered)
+                return null;
+
+            // Create a default account for the new user
+            var defaultAccount = new Account
+            {
+                UserId = user.Id,
+                AccountName = "Main Account",
+                CurrentBalance = 0
+            };
+
+            await _accountRepository.AddAsync(defaultAccount);
+
+            // Reload user with accounts included
+            return await _userRepository.GetByIdAsync(user.Id);
+        }
     }
 }

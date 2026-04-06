@@ -27,9 +27,9 @@ namespace SmartSaving.Views
         }
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (DataContext is LoginViewModel vm)
+            if (sender is PasswordBox pb && DataContext is LoginViewModel vm)
             {
-                vm.Password = ((PasswordBox)sender).Password;
+                vm.Password = pb.Password;
             }
         }
     }

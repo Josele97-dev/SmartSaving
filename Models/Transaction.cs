@@ -1,19 +1,44 @@
 using System.Reflection;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public enum TransactionType
+namespace SmartSaving.Models
 {
-    Income,
-    Expense
-}
+    public enum TransactionType
+    {
+        Income,
+        Expense
+    }
 
-public class Transaction
-{
-    public int Id { get; set; }
-    public TransactionType Type { get; set; }
-    public string Title { get; set; }
-    public decimal Amount { get; set; }
-    public Category Category { get; set; }
-    public string Description { get; set; }
-    public DateTime Date { get; set; }
+    [Table("transactions")]
+    public class Transaction
+    {
+        [Key]
+        [Column("transaction_ID")]
+        public int Id { get; set; }
 
+        [Column("account_ID")]
+        public int AccountId { get; set; }
+
+        [Column("category_ID")]
+        public int CategoryId { get; set; }
+
+        [Column("amount")]
+        public decimal Amount { get; set; }
+
+        [Column("date")]
+        public DateTime Date { get; set; } = DateTime.Now;
+
+        [Column("description")]
+        public string Description { get; set; } = string.Empty;
+
+        // Navigation properties
+        public Account Account { get; set; } = null!;
+        public Category Category { get; set; } = null!;
+
+        // Convenience property — type is determined by the Category
+        [NotMapped]
+        public TransactionType Type => Category?.Type ?? TransactionType.Expense;
+    }
 }

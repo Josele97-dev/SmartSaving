@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SmartSaving.ViewModels;
 
 namespace SmartSaving.Views
 {
@@ -24,3 +25,4 @@ namespace SmartSaving.Views
             DataContext = viewModel;
         }
     }
+}

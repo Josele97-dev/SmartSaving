@@ -1,70 +1,75 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using SmartSaving.Models;
+using SmartSaving.Repositories;
 
 namespace SmartSaving.Services
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
     {
-        private readonly User _user;
+        private readonly ITransactionRepository _transactionRepository;
+        private readonly IAccountRepository _accountRepository;
 
-        public TransactionService(User user)
+        public TransactionService(ITransactionRepository transactionRepository, IAccountRepository accountRepository)
         {
-            _user = user ?? throw new ArgumentNullException(nameof(user));
+            _transactionRepository = transactionRepository;
+            _accountRepository = accountRepository;
         }
 
-        public void AddTransaction(Transaction Transaction)
+        public async Task<List<Transaction>> GetTransactionsAsync(int userId)
         {
-            if (Transaction == null)
-                throw new ArgumentNullException(nameof(Transaction));
+            var account = await GetDefaultAccountAsync(userId);
+            return await _transactionRepository.GetAllByAccountAsync(account.Id);
+        }
 
-            if (string.IsNullOrWhiteSpace(Transaction.Description))
+        public async Task<List<Transaction>> GetByTypeAsync(int userId, TransactionType type)
+        {
+            var account = await GetDefaultAccountAsync(userId);
+            return await _transactionRepository.GetByTypeAsync(account.Id, type);
+        }
+
+        public async Task<bool> AddTransactionAsync(int userId, Transaction transaction)
+        {
+            if (transaction == null)
+                throw new ArgumentNullException(nameof(transaction));
+
+            if (string.IsNullOrWhiteSpace(transaction.Description))
                 throw new ArgumentException("Description is required.");
 
-            if (Transaction.Amount == 0)
-                throw new ArgumentException("Amount cannot be 0.");
+            if (transaction.Amount <= 0)
+                throw new ArgumentException("Amount must be greater than 0.");
 
-            if (Transaction.Date > DateTime.Now)
+            if (transaction.Date > DateTime.Now)
                 throw new ArgumentException("Date cannot be in the future.");
 
-            _user.Transactions.Add(Transaction);
+            var account = await GetDefaultAccountAsync(userId);
+            transaction.AccountId = account.Id;
+
+            return await _transactionRepository.AddAsync(transaction);
         }
 
-        public bool DeleteTransaction(int id)
+        public async Task<bool> UpdateTransactionAsync(Transaction transaction)
         {
-            var mov = _user.Transactions.FirstOrDefault(m => m.Id == id);
+            if (transaction == null)
+                throw new ArgumentNullException(nameof(transaction));
 
-            if (mov == null)
-                return false;
-
-            _user.Transactions.Remove(mov);
-            return true;
+            return await _transactionRepository.UpdateAsync(transaction);
         }
 
-        public void UpdateTransaction(Transaction updatedTransaction)
+        public async Task<bool> DeleteTransactionAsync(int id)
         {
-            if (updatedTransaction == null)
-                throw new ArgumentNullException(nameof(updatedTransaction));
+            return await _transactionRepository.DeleteAsync(id);
+        }
 
-            var mov = _user.Transactions
-                .FirstOrDefault(m => m.Id == updatedTransaction.Id);
+        private async Task<Account> GetDefaultAccountAsync(int userId)
+        {
+            var account = await _accountRepository.GetDefaultByUserIdAsync(userId);
 
-            if (mov == null)
-                throw new InvalidOperationException("Transaction not found.");
+            if (account == null)
+                throw new InvalidOperationException($"No account found for user {userId}.");
 
-            if (string.IsNullOrWhiteSpace(updatedTransaction.Description))
-                throw new ArgumentException("Description is required.");
-
-            if (updatedTransaction.Amount == 0)
-                throw new ArgumentException("Amount cannot be 0.");
-
-            if (updatedTransaction.Date > DateTime.Now)
-                throw new ArgumentException("Date cannot be in the future.");
-
-            mov.Description = updatedTransaction.Description;
-            mov.Amount = updatedTransaction.Amount;
-            mov.Date = updatedTransaction.Date;
-            mov.Type = updatedTransaction.Type;
-            mov.Category = updatedTransaction.Category;
+            return account;
         }
     }
 }

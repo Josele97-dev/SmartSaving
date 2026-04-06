@@ -1,6 +1,6 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
+using SmartSaving.Repositories;
+using SmartSaving.Services;
 using SmartSaving.ViewModels;
 using SmartSaving.Views;
 
@@ -12,14 +12,22 @@ namespace SmartSaving
         {
             base.OnStartup(e);
 
-            var authService = new AuthService();
-            var navigationService = new NavigationService(authService);
+            // 1. Create repositories
+            var userRepository = new UserRepository();
+            var accountRepository = new AccountRepository();
+            var transactionRepository = new TransactionRepository();
 
+            // 2. Create services (inject repositories)
+            var authService = new AuthService(userRepository, accountRepository);
+            var transactionService = new TransactionService(transactionRepository, accountRepository);
+
+            // 3. Create navigation service (inject services)
+            var navigationService = new NavigationService(authService, transactionService);
+
+            // 4. Open the login window
             var loginVM = new LoginViewModel(authService, navigationService);
             var loginWindow = new LoginWindow(loginVM);
-
             loginWindow.Show();
         }
-   
     }
 }

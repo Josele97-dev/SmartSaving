@@ -1,5 +1,13 @@
-public interface INavigationService
+using SmartSaving.Models;
+
+namespace SmartSaving.Services
 {
-    void OpenMainWindow(User user);
-    void OpenLoginWindow();
+    public interface INavigationService
+    {
+        void OpenLoginWindow();
+        void OpenRegisterWindow();
+        void OpenMainWindow(User user);
+        void OpenTransactionWindow(User user);
+    }
 }
+

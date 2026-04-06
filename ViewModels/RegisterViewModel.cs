@@ -1,75 +1,140 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using SmartSaving.Commands;
+using SmartSaving.Services;
 
 namespace SmartSaving.ViewModels
 {
     public class RegisterViewModel : BaseViewModel
     {
-        private string _username;
-        private string _password;
-        private string _confirmPassword;
+        private readonly IAuthService _authService;
+        private readonly INavigationService _navigationService;
 
-        public string Username
+        private string _firstName = string.Empty;
+        private string _lastName = string.Empty;
+        private string _email = string.Empty;
+        private string _password = string.Empty;
+        private string _confirmPassword = string.Empty;
+        private string _errorMessage = string.Empty;
+
+        public string FirstName
         {
-            get => _username;
-            set
-            {
-                _username = value;
-                OnPropertyChanged();
-            }
+            get => _firstName;
+            set { _firstName = value; OnPropertyChanged(); }
+        }
+
+        public string LastName
+        {
+            get => _lastName;
+            set { _lastName = value; OnPropertyChanged(); }
+        }
+
+        public string Email
+        {
+            get => _email;
+            set { _email = value; OnPropertyChanged(); }
         }
 
         public string Password
         {
             get => _password;
-            set
-            {
-                _password = value;
-                OnPropertyChanged();
-            }
+            set { _password = value; OnPropertyChanged(); }
         }
 
         public string ConfirmPassword
         {
             get => _confirmPassword;
-            set
-            {
-                _confirmPassword = value;
-                OnPropertyChanged();
-            }
+            set { _confirmPassword = value; OnPropertyChanged(); }
+        }
+
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set { _errorMessage = value; OnPropertyChanged(); }
         }
 
         public ICommand RegisterCommand { get; }
+        public ICommand OpenLoginCommand { get; }
 
-        public RegisterViewModel()
+        public RegisterViewModel(IAuthService authService, INavigationService navigationService)
         {
-            RegisterCommand = new RelayCommand(Register);
+            _authService = authService;
+            _navigationService = navigationService;
+
+            RegisterCommand = new AsyncRelayCommand(RegisterAsync);
+            OpenLoginCommand = new RelayCommand(OpenLogin);
         }
 
-        private void Register()
+        private async Task RegisterAsync()
         {
-            if (Password != ConfirmPassword)
-                return;
+            ErrorMessage = string.Empty;
 
-            var user = _authService.Register(Username, Password);
-        }
-        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is RegisterViewModel vm)
+            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
             {
-                vm.Password = ((PasswordBox)sender).Password;
+                ErrorMessage = "Please enter your first and last name.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Email) || !Email.Contains("@"))
+            {
+                ErrorMessage = "Please enter a valid email address.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessage = "Please enter a password.";
+                return;
+            }
+
+            if (Password.Length < 6)
+            {
+                ErrorMessage = "Password must be at least 6 characters.";
+                return;
+            }
+
+            if (Password != ConfirmPassword)
+            {
+                ErrorMessage = "Passwords do not match.";
+                return;
+            }
+
+            try
+            {
+                var user = await _authService.RegisterAsync(Email, Password, FirstName, LastName);
+
+                if (user == null)
+                {
+                    ErrorMessage = "Registration failed. Email may already be in use.";
+                    return;
+                }
+
+                // Registration successful — go back to login
+                _navigationService.OpenLoginWindow();
+                CloseCurrentWindow();
+            }
+            catch (System.Exception ex)
+            {
+                ErrorMessage = $"An error occurred: {ex.Message}";
             }
         }
 
-        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        private void OpenLogin()
         {
-            if (DataContext is RegisterViewModel vm)
+            _navigationService.OpenLoginWindow();
+            CloseCurrentWindow();
+        }
+
+        private void CloseCurrentWindow()
+        {
+            foreach (Window window in Application.Current.Windows)
             {
-                vm.ConfirmPassword = ((PasswordBox)sender).Password;
+                if (window.DataContext == this)
+                {
+                    window.Close();
+                    break;
+                }
             }
         }
     }

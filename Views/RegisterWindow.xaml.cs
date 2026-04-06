@@ -27,20 +27,21 @@ namespace SmartSaving.Views
         }
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (DataContext is RegisterViewModel vm)
+            if (sender is PasswordBox pb && DataContext is RegisterViewModel vm)
             {
-                vm.Password = ((PasswordBox)sender).Password;
+                vm.Password = pb.Password;
             }
         }
 
         private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (DataContext is RegisterViewModel vm)
+            if (sender is PasswordBox pb && DataContext is RegisterViewModel vm)
             {
-                vm.ConfirmPassword = ((PasswordBox)sender).Password;
+                vm.ConfirmPassword = pb.Password;
             }
         }
-
     }
+
+    
 
 }
