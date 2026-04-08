@@ -1,11 +1,12 @@
+using SmartSaving.Commands;
+using SmartSaving.Models;
+using SmartSaving.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using SmartSaving.Commands;
-using SmartSaving.Models;
-using SmartSaving.Services;
 
 namespace SmartSaving.ViewModels
 {
@@ -44,10 +45,22 @@ namespace SmartSaving.ViewModels
             set { _recentTransactions = value; OnPropertyChanged(); }
         }
 
+        private Transaction? _selectedTransaction;
+        public Transaction? SelectedTransaction
+        {
+            get => _selectedTransaction;
+            set { _selectedTransaction = value; OnPropertyChanged(); }
+        }
+    
+
         public string WelcomeMessage => $"Welcome, {_currentUser.FirstName}!";
 
         public ICommand OpenTransactionCommand { get; }
         public ICommand RefreshCommand { get; }
+
+        public ICommand LogoutCommand { get; }
+
+        public ICommand EditTransactionCommand { get; }
 
         public MainViewModel(INavigationService navigationService, ITransactionService transactionService, User user)
         {
@@ -57,6 +70,8 @@ namespace SmartSaving.ViewModels
 
             OpenTransactionCommand = new RelayCommand(OpenTransaction);
             RefreshCommand = new AsyncRelayCommand(LoadDataAsync);
+            LogoutCommand = new RelayCommand(Logout);
+            EditTransactionCommand = new RelayCommand(EditTransaction);
 
             // Load balance from the user's default account
             var defaultAccount = user.Accounts?.FirstOrDefault();
@@ -93,6 +108,24 @@ namespace SmartSaving.ViewModels
         private void OpenTransaction()
         {
             _navigationService.OpenTransactionWindow(_currentUser);
+        }
+        private void Logout()  // add here
+        {
+            _navigationService.OpenLoginWindow();
+
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.DataContext == this)
+                {
+                    window.Close();
+                    break;
+                }
+            }
+        }
+        private void EditTransaction()
+        {
+            if (SelectedTransaction == null) return;
+            _navigationService.OpenTransactionWindow(_currentUser, SelectedTransaction);
         }
     }
 }

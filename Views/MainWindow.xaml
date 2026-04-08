@@ -75,8 +75,22 @@
 					<ListView ItemsSource="{Binding RecentTransactions}"
                               Background="Transparent"
                               BorderThickness="0"
-                              Foreground="White">
-						<ListView.View>
+                              Foreground="White"
+                              SelectedItem="{Binding SelectedTransaction}"
+                              MouseDoubleClick="ListView_MouseDoubleClick">
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#FF3D566E"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        
+                        <ListView.View>
 							<GridView>
 								<GridViewColumn Header="Date" Width="90"
                                                 DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>
@@ -115,7 +129,15 @@
                             Command="{Binding RefreshCommand}" />
 				</Grid>
 
-			</StackPanel>
+
+                <Button Content="Logout"
+        Height="20"
+        Margin="0,10,0,0"
+        Background="#FFE74C3C"
+        Foreground="White"
+        FontWeight="Bold"
+        Command="{Binding LogoutCommand}" />
+            </StackPanel>
 		</ScrollViewer>
 	</Grid>
 </Window>

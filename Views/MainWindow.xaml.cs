@@ -24,5 +24,10 @@ namespace SmartSaving.Views
             InitializeComponent();
             DataContext = viewModel;
         }
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+                vm.EditTransactionCommand.Execute(null);
+        }
     }
 }

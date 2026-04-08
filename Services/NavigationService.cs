@@ -37,9 +37,11 @@ namespace SmartSaving.Services
             window.Show();
         }
 
-        public void OpenTransactionWindow(User user)
+        public void OpenTransactionWindow(User user, Transaction? transaction = null)
         {
-            var vm = new TransactionViewModel(_transactionService, user);
+            var vm = transaction != null
+        ? new TransactionViewModel(_transactionService, user, transaction)
+        : new TransactionViewModel(_transactionService, user);
             var window = new TransactionWindow(vm);
             window.Show();
         }
