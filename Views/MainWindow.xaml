@@ -83,7 +83,7 @@
                             <Style TargetType="ListViewItem">
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="#FF3D566E"/>
+                                        <Setter Property="Background" Value="#FF1A2F3E"/>
                                         <Setter Property="Foreground" Value="White"/>
                                     </Trigger>
                                 </Style.Triggers>

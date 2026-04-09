@@ -16,13 +16,14 @@ namespace SmartSaving
             var userRepository = new UserRepository();
             var accountRepository = new AccountRepository();
             var transactionRepository = new TransactionRepository();
+            var categoryRepository = new CategoryRepository();
 
             // 2. Create services (inject repositories)
             var authService = new AuthService(userRepository, accountRepository);
-            var transactionService = new TransactionService(transactionRepository, accountRepository);
+            var transactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository);
 
             // 3. Create navigation service (inject services)
-            var navigationService = new NavigationService(authService, transactionService);
+            var navigationService = new NavigationService(authService, transactionService, categoryRepository);
 
             // 4. Open the login window
             var loginVM = new LoginViewModel(authService, navigationService);

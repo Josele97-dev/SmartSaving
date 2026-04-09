@@ -81,5 +81,16 @@ namespace SmartSaving.Repositories
                 return await context.SaveChangesAsync() > 0;
             }
         }
+        public async Task<List<Transaction>> GetByMonthAsync(int categoryId, int month, int year)
+        {
+            using (var context = new AppDbContext())
+            {
+                return await context.Transactions
+                    .Where(t => t.CategoryId == categoryId
+                             && t.Date.Month == month
+                             && t.Date.Year == year)
+                    .ToListAsync();
+            }
+        }
     }
 }

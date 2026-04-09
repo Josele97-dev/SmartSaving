@@ -12,5 +12,6 @@ namespace SmartSaving.Repositories
         Task<bool> AddAsync(Transaction transaction);
         Task<bool> UpdateAsync(Transaction transaction);
         Task<bool> DeleteAsync(int id);
+        Task<List<Transaction>> GetByMonthAsync(int categoryId, int month, int year);
     }
 }

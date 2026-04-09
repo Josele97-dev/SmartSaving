@@ -1,6 +1,7 @@
-using SmartSaving.Views;
-using SmartSaving.ViewModels;
 using SmartSaving.Models;
+using SmartSaving.Repositories;
+using SmartSaving.ViewModels;
+using SmartSaving.Views;
 
 
 namespace SmartSaving.Services
@@ -9,11 +10,12 @@ namespace SmartSaving.Services
     {
         private readonly IAuthService _authService;
         private readonly ITransactionService _transactionService;
-
-        public NavigationService(IAuthService authService, ITransactionService transactionService)
+        private readonly ICategoryRepository _categoryRepository;
+        public NavigationService(IAuthService authService, ITransactionService transactionService, ICategoryRepository categoryRepository)
         {
             _authService = authService;
             _transactionService = transactionService;
+            _categoryRepository = categoryRepository;
         }
 
         public void OpenLoginWindow()
@@ -40,8 +42,8 @@ namespace SmartSaving.Services
         public void OpenTransactionWindow(User user, Transaction? transaction = null)
         {
             var vm = transaction != null
-        ? new TransactionViewModel(_transactionService, user, transaction)
-        : new TransactionViewModel(_transactionService, user);
+       ? new TransactionViewModel(_transactionService, user, _categoryRepository, transaction)
+        : new TransactionViewModel(_transactionService, user, _categoryRepository);
             var window = new TransactionWindow(vm);
             window.Show();
         }

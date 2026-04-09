@@ -51,6 +51,7 @@
 						<TextBox Margin="0,5,0,10"
                                  Background="#FFECF0F1"
                                  Padding="5"
+                                 IsEnabled="{Binding IsNotEditing}"
                                  Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" />
 
 						<!-- Date -->
@@ -58,6 +59,7 @@
 						<DatePicker Margin="0,5,0,10"
                                     Background="#FFECF0F1"
                                     Padding="5"
+                                    IsEnabled="{Binding IsNotEditing}"
                                     SelectedDate="{Binding Date}" />
 
 						<!-- Category (if categories are available) -->
@@ -74,10 +76,26 @@
                         </DataTemplate>
                         </ComboBox.ItemTemplate>
                         </ComboBox>
+                        <TextBlock Text="Monthly Budget Limit (leave empty for no limit)" 
+                                   Foreground="White" 
+                                   Margin="0,5,0,0"/>
+                        <TextBox Margin="0,5,0,20"
+                                 Background="#FFECF0F1"
+                                 Padding="5"
+                                 Text="{Binding BudgetLimit, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <!-- Save Button -->
-						<Button Content="Save"
+                        <Button Content="Save Limit"
+                                Height="25"
+                                Background="DeepSkyBlue"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                Command="{Binding SaveCommand}" />
+
+                        <!-- Save Button -->
+						<Button Content="Save Transaction"
                                 Height="35"
+                                Margin="0,20,0,0"
                                 Background="#FF1ABC9C"
                                 Foreground="White"
                                 FontWeight="Bold"

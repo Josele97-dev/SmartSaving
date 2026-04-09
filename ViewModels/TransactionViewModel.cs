@@ -1,3 +1,7 @@
+using SmartSaving.Commands;
+using SmartSaving.Models;
+using SmartSaving.Repositories;
+using SmartSaving.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -5,9 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using SmartSaving.Commands;
-using SmartSaving.Models;
-using SmartSaving.Services;
 
 namespace SmartSaving.ViewModels
 {
@@ -15,6 +16,7 @@ namespace SmartSaving.ViewModels
     {
         private readonly ITransactionService _transactionService;
         private readonly User _currentUser;
+        private readonly ICategoryRepository _categoryRepository;
         private Transaction? _existingTransaction;
 
         // ---- Form fields ----
@@ -53,12 +55,20 @@ namespace SmartSaving.ViewModels
             get => _categoryId;
             set { _categoryId = value; OnPropertyChanged(); }
         }
+       
 
         private string _errorMessage = string.Empty;
         public string ErrorMessage
         {
             get => _errorMessage;
             set { _errorMessage = value; OnPropertyChanged(); }
+        }
+
+        private string _budgetLimit = string.Empty;
+        public string BudgetLimit
+        {
+            get => _budgetLimit;
+            set { _budgetLimit = value; OnPropertyChanged(); }
         }
 
         // ---- Collections for UI binding ----
@@ -84,6 +94,8 @@ namespace SmartSaving.ViewModels
         public bool IsEditing => _existingTransaction != null;
         public string Title => IsEditing ? "Edit Transaction" : "New Transaction";
 
+        public bool IsNotEditing => !IsEditing;
+
         // ---- Commands ----
 
         public ICommand SaveCommand { get; }
@@ -91,10 +103,11 @@ namespace SmartSaving.ViewModels
         public ICommand RefreshCommand { get; }
 
         // Constructor for CREATING a new transaction
-        public TransactionViewModel(ITransactionService transactionService, User user)
+        public TransactionViewModel(ITransactionService transactionService, User user,ICategoryRepository categoryRepository)
         {
             _transactionService = transactionService;
             _currentUser = user;
+            _categoryRepository = categoryRepository;
 
             SaveCommand = new AsyncRelayCommand(SaveAsync);
             DeleteCommand = new AsyncRelayCommand(DeleteAsync);
@@ -108,8 +121,8 @@ namespace SmartSaving.ViewModels
         }
 
         // Constructor for EDITING an existing transaction
-        public TransactionViewModel(ITransactionService transactionService, User user, Transaction transaction)
-            : this(transactionService, user)
+        public TransactionViewModel(ITransactionService transactionService, User user, ICategoryRepository categoryRepository, Transaction transaction)
+            : this(transactionService, user, categoryRepository)
         {
             _existingTransaction = transaction;
 
@@ -196,6 +209,31 @@ namespace SmartSaving.ViewModels
 
                 // Reload transaction list
                 await LoadTransactionsAsync();
+
+                if (decimal.TryParse(BudgetLimit, out decimal limit))
+                {
+                    var category = Categories.FirstOrDefault(c => c.Id == CategoryId);
+                    if (category != null)
+                    {
+                        category.BudgetLimit = limit;
+                        await _categoryRepository.UpdateAsync(category);
+                    }
+                }
+                else if (string.IsNullOrWhiteSpace(BudgetLimit))
+                {
+                    var category = Categories.FirstOrDefault(c => c.Id == CategoryId);
+                    if (category != null)
+                    {
+                        category.BudgetLimit = null;
+                        await _categoryRepository.UpdateAsync(category);
+                    }
+                }
+
+
+            }
+            catch (InvalidOperationException ex)
+            {
+                ErrorMessage = ex.Message;
             }
             catch (ArgumentException ex)
             {

@@ -10,11 +10,13 @@ namespace SmartSaving.Services
     {
         private readonly ITransactionRepository _transactionRepository;
         private readonly IAccountRepository _accountRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public TransactionService(ITransactionRepository transactionRepository, IAccountRepository accountRepository)
+        public TransactionService(ITransactionRepository transactionRepository, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             _transactionRepository = transactionRepository;
             _accountRepository = accountRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<List<Transaction>> GetTransactionsAsync(int userId)
@@ -46,6 +48,18 @@ namespace SmartSaving.Services
             var account = await GetDefaultAccountAsync(userId);
             transaction.AccountId = account.Id;
 
+            var category = await _categoryRepository.GetByIdAsync(transaction.CategoryId);
+
+            if (category?.BudgetLimit.HasValue == true)
+            {
+                var spent = await GetMonthlySpendingByCategoryAsync(transaction.CategoryId);
+                if (spent + transaction.Amount > category.BudgetLimit.Value)
+                {
+                    throw new InvalidOperationException(
+                        $"This transaction exceeds the monthly budget limit of €{category.BudgetLimit.Value:N2} for {category.Title}.");
+                }
+            }
+
             return await _transactionRepository.AddAsync(transaction);
         }
 
@@ -70,6 +84,12 @@ namespace SmartSaving.Services
                 throw new InvalidOperationException($"No account found for user {userId}.");
 
             return account;
+        }
+        private async Task<decimal> GetMonthlySpendingByCategoryAsync(int categoryId)
+        {
+            var now = DateTime.Now;
+            var transactions = await _transactionRepository.GetByMonthAsync(categoryId, now.Month, now.Year);
+            return transactions.Sum(t => t.Amount);
         }
     }
 }
