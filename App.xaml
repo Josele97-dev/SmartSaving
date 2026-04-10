@@ -5,5 +5,7 @@
              xmlns:utils="clr-namespace:SmartSaving.Utils">
 	<Application.Resources>
 		<utils:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-	</Application.Resources>
+        <utils:PercentageToWidthConverter x:Key="PercentageToWidthConverter"/>
+        
+    </Application.Resources>
 </Application>

@@ -53,7 +53,15 @@ namespace SmartSaving.ViewModels
         public int CategoryId
         {
             get => _categoryId;
-            set { _categoryId = value; OnPropertyChanged(); }
+            set { 
+                _categoryId = value; 
+                OnPropertyChanged();
+
+                var category = Categories.FirstOrDefault(c => c.Id == value);
+                BudgetLimit = category?.BudgetLimit.HasValue == true
+                    ? category.BudgetLimit.Value.ToString()
+                    : string.Empty;
+            }
         }
        
 

@@ -1,5 +1,6 @@
 using SmartSaving.Commands;
 using SmartSaving.Models;
+using SmartSaving.Repositories;
 using SmartSaving.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,8 @@ namespace SmartSaving.ViewModels
     {
         private readonly INavigationService _navigationService;
         private readonly ITransactionService _transactionService;
+        private readonly IAccountRepository _accountRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly User _currentUser;
 
         private decimal _balance;
@@ -51,7 +54,14 @@ namespace SmartSaving.ViewModels
             get => _selectedTransaction;
             set { _selectedTransaction = value; OnPropertyChanged(); }
         }
-    
+
+        private ObservableCollection<CategoryBudgetProgress> _categoryProgress = new();
+        public ObservableCollection<CategoryBudgetProgress> CategoryProgress
+        {
+            get => _categoryProgress;
+            set { _categoryProgress = value; OnPropertyChanged(); }
+        }
+
 
         public string WelcomeMessage => $"Welcome, {_currentUser.FirstName}!";
 
@@ -62,16 +72,21 @@ namespace SmartSaving.ViewModels
 
         public ICommand EditTransactionCommand { get; }
 
-        public MainViewModel(INavigationService navigationService, ITransactionService transactionService, User user)
+        public ICommand ManageCategoriesCommand { get; }
+
+        public MainViewModel(INavigationService navigationService, ITransactionService transactionService, IAccountRepository accountRepository, ICategoryRepository categoryRepository, User user)
         {
             _navigationService = navigationService;
             _transactionService = transactionService;
+            _accountRepository = accountRepository;
+            _categoryRepository = categoryRepository; // add this
             _currentUser = user;
 
             OpenTransactionCommand = new RelayCommand(OpenTransaction);
             RefreshCommand = new AsyncRelayCommand(LoadDataAsync);
             LogoutCommand = new RelayCommand(Logout);
             EditTransactionCommand = new RelayCommand(EditTransaction);
+            ManageCategoriesCommand = new RelayCommand(OpenManageCategories);
 
             // Load balance from the user's default account
             var defaultAccount = user.Accounts?.FirstOrDefault();
@@ -98,6 +113,31 @@ namespace SmartSaving.ViewModels
                     .Sum(t => t.Amount);
 
                 Balance = TotalIncome - TotalExpenses;
+
+                var defaultAccount = await _accountRepository.GetDefaultByUserIdAsync(_currentUser.Id);
+                if (defaultAccount != null)
+                {
+                    var categories = await _categoryRepository.GetByAccountIdAsync(defaultAccount.Id);
+                    var progressList = new ObservableCollection<CategoryBudgetProgress>();
+
+                    foreach (var category in categories)
+                    {
+                        var spent = transactions
+                            .Where(t => t.CategoryId == category.Id
+                                     && t.Date.Month == DateTime.Now.Month
+                                     && t.Date.Year == DateTime.Now.Year)
+                            .Sum(t => t.Amount);
+
+                        progressList.Add(new CategoryBudgetProgress
+                        {
+                            CategoryName = category.Title,
+                            Spent = spent,
+                            Limit = category.BudgetLimit!.Value
+                        });
+                    }
+
+                    CategoryProgress = progressList;
+                }
             }
             catch (System.Exception)
             {
@@ -127,5 +167,21 @@ namespace SmartSaving.ViewModels
             if (SelectedTransaction == null) return;
             _navigationService.OpenTransactionWindow(_currentUser, SelectedTransaction);
         }
+
+        private void OpenManageCategories()
+        {
+            _navigationService.OpenManageCategoriesWindow(_currentUser);
+        }
+    }
+    public class CategoryBudgetProgress
+    {
+        public string CategoryName { get; set; } = string.Empty;
+        public decimal Spent { get; set; }
+        public decimal Limit { get; set; }
+        public string Summary => $"{CategoryName}: €{Spent:N2} / €{Limit:N2}";
+        public double Percentage => Limit > 0 ? (double)(Spent / Limit) * 100 : 0;
+        public string ProgressColour => Percentage >= 100 ? "#FFE74C3C"
+                                      : Percentage >= 80 ? "#FFF39C12"
+                                      : "#FF27AE60";
     }
 }

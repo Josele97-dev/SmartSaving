@@ -8,6 +8,7 @@ namespace SmartSaving.Services
         void OpenRegisterWindow();
         void OpenMainWindow(User user);
         void OpenTransactionWindow(User user, Transaction? transaction = null);
+        void OpenManageCategoriesWindow(User user);
     }
 }
 

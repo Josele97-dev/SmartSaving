@@ -26,5 +26,23 @@ namespace SmartSaving.Repositories
                 return await context.SaveChangesAsync() > 0;
             }
         }
+        public async Task<List<Category>> GetByAccountIdAsync(int accountId)
+        {
+            using (var context = new AppDbContext())
+            {
+                return await context.Categories
+                    .Where(c => c.AccountId == accountId && c.BudgetLimit.HasValue)
+                    .ToListAsync();
+            }
+        }
+        public async Task<List<Category>> GetAllByAccountIdAsync(int accountId)
+        {
+            using (var context = new AppDbContext())
+            {
+                return await context.Categories
+                    .Where(c => c.AccountId == accountId)
+                    .ToListAsync();
+            }
+        }
     }
 }
