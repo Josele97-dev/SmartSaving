@@ -92,5 +92,40 @@ namespace SmartSaving.Repositories
                     .ToListAsync();
             }
         }
+        public async Task<List<Transaction>> SearchAsync(int userId, string? keyword, int? categoryId, TransactionType? type, DateTime? from, DateTime? to)
+        {
+            using (var context = new AppDbContext())
+            {
+                var account = await context.Accounts
+                    .FirstOrDefaultAsync(a => a.UserId == userId);
+
+                if (account == null)
+                    return new List<Transaction>();
+
+                var query = context.Transactions
+                    .Include(t => t.Category)
+                    .Where(t => t.AccountId == account.Id)
+                    .AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                    query = query.Where(t => t.Description.Contains(keyword));
+
+                if (categoryId.HasValue)
+                    query = query.Where(t => t.CategoryId == categoryId.Value);
+
+                if (type.HasValue)
+                    query = query.Where(t => t.Category.Type == type.Value);
+
+                if (from.HasValue)
+                    query = query.Where(t => t.Date >= from.Value);
+
+                if (to.HasValue)
+                    query = query.Where(t => t.Date <= to.Value);
+
+                return await query
+                    .OrderByDescending(t => t.Date)
+                    .ToListAsync();
+            }
+        }
     }
 }

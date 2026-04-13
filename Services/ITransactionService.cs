@@ -11,5 +11,6 @@ namespace SmartSaving.Services
         Task<bool> AddTransactionAsync(int userId, Transaction transaction);
         Task<bool> UpdateTransactionAsync(Transaction transaction);
         Task<bool> DeleteTransactionAsync(int id);
+        Task<decimal> GetMonthlySpendingByCategoryAsync(int userId, int categoryId);
     }
 }

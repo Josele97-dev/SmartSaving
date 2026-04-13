@@ -91,5 +91,12 @@ namespace SmartSaving.Services
             var transactions = await _transactionRepository.GetByMonthAsync(categoryId, now.Month, now.Year);
             return transactions.Sum(t => t.Amount);
         }
+        public async Task<decimal> GetMonthlySpendingByCategoryAsync(int userId, int categoryId)
+        {
+            var account = await GetDefaultAccountAsync(userId);
+            var now = DateTime.Now;
+            var transactions = await _transactionRepository.GetByMonthAsync(categoryId, now.Month, now.Year);
+            return transactions.Sum(t => t.Amount);
+        }
     }
 }

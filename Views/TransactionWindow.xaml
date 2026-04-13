@@ -44,6 +44,7 @@
 						<TextBox Margin="0,5,0,10"
                                  Background="#FFECF0F1"
                                  Padding="5"
+                                 IsEnabled="{Binding IsEditableTransaction}"
                                  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
 
 						<!-- Amount -->
@@ -65,12 +66,13 @@
 						<!-- Category (if categories are available) -->
 						<TextBlock Text="Category" Foreground="White" />
                         <ComboBox Margin="0,5,0,20"
-          Background="#FFECF0F1"
-          Padding="5"
-          ItemsSource="{Binding Categories}"
-          SelectedValuePath="Id"
-          SelectedValue="{Binding CategoryId}">
-                        <ComboBox.ItemTemplate>
+                          Background="#FFECF0F1"
+                          Padding="5"
+                          IsEnabled="{Binding IsEditableTransaction}"
+                          ItemsSource="{Binding Categories}"
+                          SelectedValuePath="Id"
+                          SelectedValue="{Binding CategoryId}">
+                         <ComboBox.ItemTemplate>
                         <DataTemplate>
                          <TextBlock Text="{Binding Title}" Foreground="Black"/>
                         </DataTemplate>
@@ -99,9 +101,24 @@
                                 Background="#FF1ABC9C"
                                 Foreground="White"
                                 FontWeight="Bold"
-                                Command="{Binding SaveCommand}" />
+                                IsEnabled="{Binding IsEditableTransaction}"
+                                Command="{Binding SaveCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#FF1ABC9C"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="#FF95A5A6"/>
+                                            <Setter Property="Foreground" Value="#FF2C3E50"/>
+                                            <Setter Property="Opacity" Value="0.7"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-					</StackPanel>
+                    </StackPanel>
 				</Border>
 
 				<!-- Transaction History -->

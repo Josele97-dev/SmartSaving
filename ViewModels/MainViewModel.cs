@@ -74,6 +74,8 @@ namespace SmartSaving.ViewModels
 
         public ICommand ManageCategoriesCommand { get; }
 
+        public ICommand SearchCommand { get; }
+
         public MainViewModel(INavigationService navigationService, ITransactionService transactionService, IAccountRepository accountRepository, ICategoryRepository categoryRepository, User user)
         {
             _navigationService = navigationService;
@@ -87,6 +89,7 @@ namespace SmartSaving.ViewModels
             LogoutCommand = new RelayCommand(Logout);
             EditTransactionCommand = new RelayCommand(EditTransaction);
             ManageCategoriesCommand = new RelayCommand(OpenManageCategories);
+            SearchCommand = new RelayCommand(OpenSearch);
 
             // Load balance from the user's default account
             var defaultAccount = user.Accounts?.FirstOrDefault();
@@ -102,7 +105,7 @@ namespace SmartSaving.ViewModels
             {
                 var transactions = await _transactionService.GetTransactionsAsync(_currentUser.Id);
 
-                RecentTransactions = new ObservableCollection<Transaction>(transactions);
+                RecentTransactions = RecentTransactions = new ObservableCollection<Transaction>(transactions.Take(10)); ;
 
                 TotalIncome = transactions
                     .Where(t => t.Type == TransactionType.Income)
@@ -171,6 +174,11 @@ namespace SmartSaving.ViewModels
         private void OpenManageCategories()
         {
             _navigationService.OpenManageCategoriesWindow(_currentUser);
+        }
+
+        private void OpenSearch()
+        {
+            _navigationService.OpenSearchWindow(_currentUser);
         }
     }
     public class CategoryBudgetProgress
