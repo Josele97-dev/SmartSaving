@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using SmartSaving.Events;
 
 namespace SmartSaving.ViewModels
 {
@@ -21,6 +22,7 @@ namespace SmartSaving.ViewModels
         private readonly ICategoryRepository _categoryRepository;
         private Transaction? _existingTransaction;
         private readonly INavigationService _navigationService;
+        private bool _isUpdating = false;
 
         // ---- Form fields ----
 
@@ -49,25 +51,37 @@ namespace SmartSaving.ViewModels
         public string SelectedTransactionType
         {
             get => _selectedTransactionType;
-            set { _selectedTransactionType = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedTransactionType = value;
+                OnPropertyChanged();
+                UpdateFilteredCategories();
+            }
         }
 
         private int _categoryId;
         public int CategoryId
         {
             get => _categoryId;
-            set { 
-                _categoryId = value; 
+            set
+            {
+                _categoryId = value;
                 OnPropertyChanged();
 
                 var category = Categories.FirstOrDefault(c => c.Id == value);
 
                 if (category != null)
-                    SelectedTransactionType = category.Type == TransactionType.Income ? "Income" : "Expense";
+                {
+                    // Set directly without triggering UpdateFilteredCategories again
+                    _selectedTransactionType = category.Type == TransactionType.Income ? "Income" : "Expense";
+                    OnPropertyChanged(nameof(SelectedTransactionType));
+                }
 
                 BudgetLimit = category?.BudgetLimit.HasValue == true
                     ? category.BudgetLimit.Value.ToString()
                     : string.Empty;
+
+                UpdateFilteredCategories();
             }
         }
        
@@ -95,6 +109,12 @@ namespace SmartSaving.ViewModels
         {
             get => _categories;
             set { _categories = value; OnPropertyChanged(); }
+        }
+        private ObservableCollection<Category> _filteredCategories = new();
+        public ObservableCollection<Category> FilteredCategories
+        {
+            get => _filteredCategories;
+            set { _filteredCategories = value; OnPropertyChanged(); }
         }
 
         private ObservableCollection<Transaction> _transactions = new();
@@ -164,6 +184,7 @@ namespace SmartSaving.ViewModels
                 Categories = new ObservableCollection<Category>(defaultAccount.Categories);
             }
         }
+
         private async Task LoadCategoriesAsync()
         {
             var defaultAccount = _currentUser.Accounts?.FirstOrDefault();
@@ -171,6 +192,27 @@ namespace SmartSaving.ViewModels
 
             var freshCategories = await _categoryRepository.GetAllByAccountIdAsync(defaultAccount.Id);
             Categories = new ObservableCollection<Category>(freshCategories);
+            UpdateFilteredCategories(); 
+        }
+
+        private void UpdateFilteredCategories()
+        {
+            if (_isUpdating) return;
+            _isUpdating = true;
+
+            try
+            {
+                var type = SelectedTransactionType == "Income"
+                    ? TransactionType.Income
+                    : TransactionType.Expense;
+
+                FilteredCategories = new ObservableCollection<Category>(
+                    Categories.Where(c => c.Type == type));
+            }
+            finally
+            {
+                _isUpdating = false;
+            }
         }
 
         private async Task LoadTransactionsAsync()
@@ -246,13 +288,13 @@ namespace SmartSaving.ViewModels
                             {
                                 _navigationService.OpenManageCategoriesWindow(_currentUser);
 
-                                LoadCategories();
+                                await LoadCategoriesAsync(); // changed from LoadCategories()
                                 var updatedCategory = Categories.FirstOrDefault(c => c.Id == CategoryId);
                                 BudgetLimit = updatedCategory?.BudgetLimit.HasValue == true
                                     ? updatedCategory.BudgetLimit.Value.ToString()
                                     : string.Empty;
                                 return;
-                               
+
                             }
                         }
                     }
@@ -270,6 +312,7 @@ namespace SmartSaving.ViewModels
 
                 // Reload transaction list
                 await LoadTransactionsAsync();
+                EventAggregator.PublishTransactionChanged();
 
                 if (decimal.TryParse(BudgetLimit, out decimal limit))
                 {
@@ -323,6 +366,7 @@ namespace SmartSaving.ViewModels
                 OnPropertyChanged(nameof(IsEditing));
 
                 await LoadTransactionsAsync();
+                EventAggregator.PublishTransactionChanged();
             }
             catch (Exception)
             {

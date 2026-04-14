@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using SmartSaving.Events;
 
 namespace SmartSaving.ViewModels
 {
@@ -42,6 +43,13 @@ namespace SmartSaving.ViewModels
             set { _totalExpenses = value; OnPropertyChanged(); }
         }
 
+        private DateTime _lastRefreshed;
+        public DateTime LastRefreshed
+        {
+            get => _lastRefreshed;
+            set { _lastRefreshed = value; OnPropertyChanged(); OnPropertyChanged(nameof(LastRefreshedText)); }
+        }
+        public string LastRefreshedText => $"Last updated: {_lastRefreshed:dd/MM/yyyy HH:mm}";
         public ObservableCollection<Transaction> RecentTransactions
         {
             get => _recentTransactions;
@@ -95,6 +103,9 @@ namespace SmartSaving.ViewModels
             var defaultAccount = user.Accounts?.FirstOrDefault();
             Balance = defaultAccount?.CurrentBalance ?? 0;
 
+            EventAggregator.TransactionChanged += async () => await LoadDataAsync();
+            EventAggregator.CategoryChanged += async () => await LoadDataAsync();
+
             // Fire-and-forget initial data load (safe here because errors are caught internally)
             _ = LoadDataAsync();
         }
@@ -103,9 +114,13 @@ namespace SmartSaving.ViewModels
         {
             try
             {
-                var transactions = await _transactionService.GetTransactionsAsync(_currentUser.Id);
+                // Re-fetch account from database for fresh balance
+                var freshAccount = await _accountRepository.GetDefaultByUserIdAsync(_currentUser.Id);
+                if (freshAccount != null)
+                    Balance = freshAccount.CurrentBalance;
 
-                RecentTransactions = RecentTransactions = new ObservableCollection<Transaction>(transactions.Take(10)); ;
+                var transactions = await _transactionService.GetTransactionsAsync(_currentUser.Id);
+                RecentTransactions = new ObservableCollection<Transaction>(transactions.Take(10));
 
                 TotalIncome = transactions
                     .Where(t => t.Type == TransactionType.Income)
@@ -117,10 +132,10 @@ namespace SmartSaving.ViewModels
 
                 Balance = TotalIncome - TotalExpenses;
 
-                var defaultAccount = await _accountRepository.GetDefaultByUserIdAsync(_currentUser.Id);
-                if (defaultAccount != null)
+                // Load category budget progress
+                if (freshAccount != null)
                 {
-                    var categories = await _categoryRepository.GetByAccountIdAsync(defaultAccount.Id);
+                    var categories = await _categoryRepository.GetByAccountIdAsync(freshAccount.Id);
                     var progressList = new ObservableCollection<CategoryBudgetProgress>();
 
                     foreach (var category in categories)
@@ -141,10 +156,13 @@ namespace SmartSaving.ViewModels
 
                     CategoryProgress = progressList;
                 }
+
+                // Update last refreshed time
+                LastRefreshed = DateTime.Now;
             }
             catch (System.Exception)
             {
-                // Silently handle — in a real app you'd log this or show an error
+                // Silently handle
             }
         }
 
@@ -154,6 +172,10 @@ namespace SmartSaving.ViewModels
         }
         private void Logout()  // add here
         {
+
+            EventAggregator.TransactionChanged -= async () => await LoadDataAsync();
+            EventAggregator.CategoryChanged -= async () => await LoadDataAsync();
+
             _navigationService.OpenLoginWindow();
 
             foreach (Window window in Application.Current.Windows)

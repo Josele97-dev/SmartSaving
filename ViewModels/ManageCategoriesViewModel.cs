@@ -5,6 +5,7 @@ using System.Windows.Input;
 using SmartSaving.Commands;
 using SmartSaving.Models;
 using SmartSaving.Repositories;
+using SmartSaving.Events;
 
 namespace SmartSaving.ViewModels
 {
@@ -77,6 +78,7 @@ namespace SmartSaving.ViewModels
                     await _categoryRepository.UpdateAsync(category);
                 }
                 SuccessMessage = "Budget limits saved successfully!";
+                EventAggregator.PublishCategoryChanged();
             }
             catch (System.Exception)
             {

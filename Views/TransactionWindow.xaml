@@ -69,7 +69,7 @@
                           Background="#FFECF0F1"
                           Padding="5"
                           IsEnabled="{Binding IsEditableTransaction}"
-                          ItemsSource="{Binding Categories}"
+                          ItemsSource="{Binding FilteredCategories}"
                           SelectedValuePath="Id"
                           SelectedValue="{Binding CategoryId}">
                          <ComboBox.ItemTemplate>
