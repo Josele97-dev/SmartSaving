@@ -9,7 +9,7 @@ namespace SmartSaving.Models
     public class User
     {
         [Key]
-        [Column("user_ID")]
+        [Column("user_id")]
         public int Id { get; set; }
 
         [Column("username")]

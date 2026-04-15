@@ -8,10 +8,10 @@ namespace SmartSaving.Models
     public class Account
     {
         [Key]
-        [Column("account_ID")]
+        [Column("account_id")]
         public int Id { get; set; }
 
-        [Column("user_ID")]
+        [Column("user_id")]
         public int UserId { get; set; }
 
         [Column("account_name")]

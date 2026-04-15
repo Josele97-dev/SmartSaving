@@ -9,11 +9,13 @@ namespace SmartSaving.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IAccountRepository _accountRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public AuthService(IUserRepository userRepository, IAccountRepository accountRepository)
+        public AuthService(IUserRepository userRepository, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             _userRepository = userRepository;
             _accountRepository = accountRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<User?> LoginAsync(string email, string password)
@@ -46,7 +48,7 @@ namespace SmartSaving.Services
                 PasswordHash = passwordHash,
                 FirstName = firstName,
                 LastName = lastName,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
 
             bool registered = await _userRepository.RegisterAsync(user);
@@ -63,6 +65,21 @@ namespace SmartSaving.Services
             };
 
             await _accountRepository.AddAsync(defaultAccount);
+
+            // Reload user with accounts included
+            var defaultCategories = new List<Category>
+    {
+        new Category { AccountId = defaultAccount.Id, Title = "Sueldo", Type = TransactionType.Income },
+        new Category { AccountId = defaultAccount.Id, Title = "Rentas", Type = TransactionType.Income },
+        new Category { AccountId = defaultAccount.Id, Title = "Comida", Type = TransactionType.Expense },
+        new Category { AccountId = defaultAccount.Id, Title = "Transporte", Type = TransactionType.Expense },
+        new Category { AccountId = defaultAccount.Id, Title = "Entretenimiento", Type = TransactionType.Expense }
+    };
+
+            foreach (var category in defaultCategories)
+            {
+                await _categoryRepository.AddAsync(category);
+            }
 
             // Reload user with accounts included
             return await _userRepository.GetByIdAsync(user.Id);

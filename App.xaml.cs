@@ -19,7 +19,7 @@ namespace SmartSaving
             var categoryRepository = new CategoryRepository();
 
             // 2. Create services (inject repositories)
-            var authService = new AuthService(userRepository, accountRepository);
+            var authService = new AuthService(userRepository, accountRepository, categoryRepository);
             var transactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository);
 
             // 3. Create navigation service (inject services)

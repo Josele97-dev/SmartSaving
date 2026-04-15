@@ -42,7 +42,7 @@ namespace SmartSaving.Services
             if (transaction.Amount <= 0)
                 throw new ArgumentException("Amount must be greater than 0.");
 
-            if (transaction.Date > DateTime.Now)
+            if (transaction.Date > DateTime.UtcNow)
                 throw new ArgumentException("Date cannot be in the future.");
 
             var account = await GetDefaultAccountAsync(userId);
@@ -87,14 +87,14 @@ namespace SmartSaving.Services
         }
         private async Task<decimal> GetMonthlySpendingByCategoryAsync(int categoryId)
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var transactions = await _transactionRepository.GetByMonthAsync(categoryId, now.Month, now.Year);
             return transactions.Sum(t => t.Amount);
         }
         public async Task<decimal> GetMonthlySpendingByCategoryAsync(int userId, int categoryId)
         {
             var account = await GetDefaultAccountAsync(userId);
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var transactions = await _transactionRepository.GetByMonthAsync(categoryId, now.Month, now.Year);
             return transactions.Sum(t => t.Amount);
         }

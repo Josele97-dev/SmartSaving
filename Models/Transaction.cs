@@ -15,13 +15,13 @@ namespace SmartSaving.Models
     public class Transaction
     {
         [Key]
-        [Column("transaction_ID")]
+        [Column("transaction_id")]
         public int Id { get; set; }
 
-        [Column("account_ID")]
+        [Column("account_id")]
         public int AccountId { get; set; }
 
-        [Column("category_ID")]
+        [Column("category_id")]
         public int CategoryId { get; set; }
 
         [Column("amount")]

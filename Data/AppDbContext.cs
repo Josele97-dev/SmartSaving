@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartSaving.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace SmartSaving.Data
 {
@@ -14,15 +15,18 @@ namespace SmartSaving.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // TODO: Move this connection string to a config file for production
-            string connectionString = "server=localhost;port=3306;database=smartsaving;user=root;password=admin123";
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            string connectionString = "Host=aws-1-eu-west-3.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.flcxpckgssocbshylviz;Password=Admin135xxyyzz531.";
+            optionsBuilder.UseNpgsql(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Convert TransactionType enum to/from the MySQL enum strings ('income'/'expense')
+            // Register PostgreSQL enum type
+           
+
+            // Convert TransactionType enum to/from strings
             var transactionTypeConverter = new ValueConverter<TransactionType, string>(
                 v => v == TransactionType.Income ? "income" : "expense",
                 v => v == "income" ? TransactionType.Income : TransactionType.Expense
@@ -55,6 +59,7 @@ namespace SmartSaving.Data
                       .WithMany(c => c.Transactions)
                       .HasForeignKey(t => t.CategoryId);
             });
+
         }
     }
 }

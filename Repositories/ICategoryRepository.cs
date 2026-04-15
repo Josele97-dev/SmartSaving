@@ -15,5 +15,6 @@ namespace SmartSaving.Repositories
         Task<List<Category>> GetByAccountIdAsync(int accountId);
 
         Task<List<Category>> GetAllByAccountIdAsync(int accountId);
+        Task<bool> AddAsync(Category category);
     }
 }

@@ -44,5 +44,13 @@ namespace SmartSaving.Repositories
                     .ToListAsync();
             }
         }
+        public async Task<bool> AddAsync(Category category)
+        {
+            using (var context = new AppDbContext())
+            {
+                context.Categories.Add(category);
+                return await context.SaveChangesAsync() > 0;
+            }
+        }
     }
 }

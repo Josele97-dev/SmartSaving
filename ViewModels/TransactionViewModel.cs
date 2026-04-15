@@ -40,7 +40,7 @@ namespace SmartSaving.ViewModels
             set { _amount = value; OnPropertyChanged(); }
         }
 
-        private DateTime _date = DateTime.Now;
+        private DateTime _date = DateTime.UtcNow;
         public DateTime Date
         {
             get => _date;
@@ -305,7 +305,7 @@ namespace SmartSaving.ViewModels
                 // Reset form after saving
                 Description = string.Empty;
                 Amount = 0;
-                Date = DateTime.Now;
+                Date = DateTime.UtcNow;
                 _existingTransaction = null;
                 OnPropertyChanged(nameof(Title));
                 OnPropertyChanged(nameof(IsEditing));
@@ -361,7 +361,7 @@ namespace SmartSaving.ViewModels
                 _existingTransaction = null;
                 Description = string.Empty;
                 Amount = 0;
-                Date = DateTime.Now;
+                Date = DateTime.UtcNow;
                 OnPropertyChanged(nameof(Title));
                 OnPropertyChanged(nameof(IsEditing));
 
