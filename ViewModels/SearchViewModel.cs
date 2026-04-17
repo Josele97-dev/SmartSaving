@@ -1,4 +1,5 @@
 ﻿using SmartSaving.Commands;
+using SmartSaving.Events;
 using SmartSaving.Models;
 using SmartSaving.Repositories;
 using SmartSaving.Services;
@@ -37,6 +38,19 @@ namespace SmartSaving.ViewModels
             get => _selectedType;
             set { _selectedType = value; OnPropertyChanged(); }
         }
+        private bool _searchStartsWith = true;
+        public bool SearchStartsWith
+        {
+            get => _searchStartsWith;
+            set { _searchStartsWith = value; OnPropertyChanged(); }
+        }
+
+        private bool _searchContains = false;
+        public bool SearchContains
+        {
+            get => _searchContains;
+            set { _searchContains = value; OnPropertyChanged(); }
+        }
 
         private DateTime? _fromDate;
         public DateTime? FromDate
@@ -52,12 +66,17 @@ namespace SmartSaving.ViewModels
             set { _toDate = value; OnPropertyChanged(); }
         }
 
+        public Action? CloseAction { get; set; }
+        public Action? ReopenAction { get; set; }
+
         private string _errorMessage = string.Empty;
         public string ErrorMessage
         {
             get => _errorMessage;
             set { _errorMessage = value; OnPropertyChanged(); }
         }
+
+        private int _openTransactionCount = 0;
 
         // ---- Collections ----
 
@@ -100,6 +119,7 @@ namespace SmartSaving.ViewModels
             SearchCommand = new AsyncRelayCommand(SearchAsync);
             OpenTransactionCommand = new RelayCommand(OpenTransaction);
 
+            EventAggregator.TransactionWindowClosed += OnTransactionWindowClosed;
             // Load categories for the dropdown
             LoadCategories();
         }
@@ -136,12 +156,14 @@ namespace SmartSaving.ViewModels
                 };
 
                 var results = await _transactionRepository.SearchAsync(
-                    _currentUser.Id,
-                    string.IsNullOrWhiteSpace(Keyword) ? null : Keyword,
-                    categoryId,
-                    type,
-                    FromDate,
-                    ToDate
+                _currentUser.Id,
+                string.IsNullOrWhiteSpace(Keyword) ? null : Keyword,
+                SearchContains,
+                categoryId,
+                type,
+                FromDate,
+                ToDate
+
                 );
 
                 Results = new ObservableCollection<Transaction>(results);
@@ -158,7 +180,25 @@ namespace SmartSaving.ViewModels
         private void OpenTransaction()
         {
             if (SelectedTransaction == null) return;
+
+            _openTransactionCount++;
+
             _navigationService.OpenTransactionWindow(_currentUser, SelectedTransaction);
+
+            if (_openTransactionCount >= 3)
+            {
+                CloseAction?.Invoke();
+            }
+        }
+
+        private void OnTransactionWindowClosed()
+        {
+            if (_openTransactionCount > 0)
+                _openTransactionCount--;
+
+            // Reopen search window if it was closed and count dropped below 3
+            if (_openTransactionCount < 3)
+                ReopenAction?.Invoke();
         }
     }
 }

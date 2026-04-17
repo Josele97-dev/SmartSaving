@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SmartSaving.Events;
+using SmartSaving.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using SmartSaving.ViewModels;
 
 namespace SmartSaving.Views
 {
@@ -22,6 +23,8 @@ namespace SmartSaving.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+            viewModel.CloseAction = () => Close();
+            Closed += (s, e) => EventAggregator.PublishTransactionWindowClosed();
         }
     }
 }

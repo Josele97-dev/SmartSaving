@@ -10,6 +10,8 @@ namespace SmartSaving.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+            viewModel.CloseAction = () => Hide(); 
+            viewModel.ReopenAction = () => Show();
         }
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {

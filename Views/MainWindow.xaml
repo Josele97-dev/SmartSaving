@@ -136,6 +136,10 @@
                                         <Setter Property="Background" Value="#FF1A2F3E"/>
                                         <Setter Property="Foreground" Value="White"/>
                                     </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF2A4A5E"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </ListView.ItemContainerStyle>

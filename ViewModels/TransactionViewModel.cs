@@ -1,4 +1,4 @@
-using SmartSaving.Commands;
+﻿using SmartSaving.Commands;
 using SmartSaving.Models;
 using SmartSaving.Repositories;
 using SmartSaving.Services;
@@ -59,6 +59,8 @@ namespace SmartSaving.ViewModels
             }
         }
 
+        public Action? CloseAction { get; set; }
+
         private int _categoryId;
         public int CategoryId
         {
@@ -91,6 +93,13 @@ namespace SmartSaving.ViewModels
         {
             get => _errorMessage;
             set { _errorMessage = value; OnPropertyChanged(); }
+        }
+
+        private string _successMessage = string.Empty;
+        public string SuccessMessage
+        {
+            get => _successMessage;
+            set { _successMessage = value; OnPropertyChanged(); }
         }
 
         private string _budgetLimit = string.Empty;
@@ -246,6 +255,8 @@ namespace SmartSaving.ViewModels
 
             try
             {
+                bool budgetExceeded = false;
+
                 if (IsEditing)
                 {
                     _existingTransaction!.Description = Description;
@@ -267,16 +278,25 @@ namespace SmartSaving.ViewModels
 
                     // Check budget before saving
                     var category = Categories.FirstOrDefault(c => c.Id == CategoryId);
+                    
+
                     if (category?.BudgetLimit.HasValue == true)
                     {
-                        var spent = await _transactionService.GetMonthlySpendingByCategoryAsync(_currentUser.Id, CategoryId);
+                        var now = DateTime.UtcNow;
+                        var allTransactions = await _transactionService.GetTransactionsAsync(_currentUser.Id);
+                        var spent = allTransactions
+                            .Where(t => t.CategoryId == CategoryId
+                                     && t.Date.Month == now.Month
+                                     && t.Date.Year == now.Year)
+                            .Sum(t => t.Amount);
+
                         if (spent + Amount > category.BudgetLimit.Value)
                         {
                             var remaining = category.BudgetLimit.Value - spent;
                             var message = $"This transaction will exceed your monthly budget for {category.Title}.\n\n" +
-                                          $"Budget: �{category.BudgetLimit.Value:N2}\n" +
-                                          $"Spent so far: �{spent:N2}\n" +
-                                          $"Remaining: �{remaining:N2}";
+                                          $"Budget: €{category.BudgetLimit.Value:N2}\n" +
+                                          $"Spent so far: €{spent:N2}\n" +
+                                          $"Remaining: €{remaining:N2}";
 
                             var dialog = new BudgetWarningDialog(message);
                             dialog.ShowDialog();
@@ -296,11 +316,14 @@ namespace SmartSaving.ViewModels
                                 return;
 
                             }
+                            budgetExceeded = true;
                         }
                     }
 
                     await _transactionService.AddTransactionAsync(_currentUser.Id, transaction);
                 }
+
+                bool wasEditing = IsEditing;
 
                 // Reset form after saving
                 Description = string.Empty;
@@ -313,27 +336,35 @@ namespace SmartSaving.ViewModels
                 // Reload transaction list
                 await LoadTransactionsAsync();
                 EventAggregator.PublishTransactionChanged();
+                CloseAction?.Invoke();
 
-                if (decimal.TryParse(BudgetLimit, out decimal limit))
-                {
-                    var category = Categories.FirstOrDefault(c => c.Id == CategoryId);
-                    if (category != null)
+                if (budgetExceeded)
+                    SuccessMessage = "⚠ Transaction saved — budget limit exceeded!";
+                else
+                    SuccessMessage = string.Empty;
+
+
+                if (!wasEditing) {
+                    if (decimal.TryParse(BudgetLimit, out decimal limit))
                     {
-                        category.BudgetLimit = limit;
-                        await _categoryRepository.UpdateAsync(category);
+                        var category = Categories.FirstOrDefault(c => c.Id == CategoryId);
+                        if (category != null)
+                        {
+                            category.BudgetLimit = limit;
+                            await _categoryRepository.UpdateAsync(category);
+                        }
+                    }
+                    else if (string.IsNullOrWhiteSpace(BudgetLimit))
+                    {
+                        var category = Categories.FirstOrDefault(c => c.Id == CategoryId);
+                        if (category != null)
+                        {
+                            category.BudgetLimit = null;
+                            await _categoryRepository.UpdateAsync(category);
+                        }
                     }
                 }
-                else if (string.IsNullOrWhiteSpace(BudgetLimit))
-                {
-                    var category = Categories.FirstOrDefault(c => c.Id == CategoryId);
-                    if (category != null)
-                    {
-                        category.BudgetLimit = null;
-                        await _categoryRepository.UpdateAsync(category);
-                    }
-                }
-
-
+                    
             }
             catch (InvalidOperationException ex)
             {

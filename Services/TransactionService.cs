@@ -48,17 +48,7 @@ namespace SmartSaving.Services
             var account = await GetDefaultAccountAsync(userId);
             transaction.AccountId = account.Id;
 
-            var category = await _categoryRepository.GetByIdAsync(transaction.CategoryId);
-
-            if (category?.BudgetLimit.HasValue == true)
-            {
-                var spent = await GetMonthlySpendingByCategoryAsync(transaction.CategoryId);
-                if (spent + transaction.Amount > category.BudgetLimit.Value)
-                {
-                    throw new InvalidOperationException(
-                        $"This transaction exceeds the monthly budget limit of €{category.BudgetLimit.Value:N2} for {category.Title}.");
-                }
-            }
+           
 
             return await _transactionRepository.AddAsync(transaction);
         }
@@ -85,18 +75,7 @@ namespace SmartSaving.Services
 
             return account;
         }
-        private async Task<decimal> GetMonthlySpendingByCategoryAsync(int categoryId)
-        {
-            var now = DateTime.UtcNow;
-            var transactions = await _transactionRepository.GetByMonthAsync(categoryId, now.Month, now.Year);
-            return transactions.Sum(t => t.Amount);
-        }
-        public async Task<decimal> GetMonthlySpendingByCategoryAsync(int userId, int categoryId)
-        {
-            var account = await GetDefaultAccountAsync(userId);
-            var now = DateTime.UtcNow;
-            var transactions = await _transactionRepository.GetByMonthAsync(categoryId, now.Month, now.Year);
-            return transactions.Sum(t => t.Amount);
-        }
+       
+
     }
 }

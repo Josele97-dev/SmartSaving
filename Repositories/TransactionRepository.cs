@@ -92,7 +92,7 @@ namespace SmartSaving.Repositories
                     .ToListAsync();
             }
         }
-        public async Task<List<Transaction>> SearchAsync(int userId, string? keyword, int? categoryId, TransactionType? type, DateTime? from, DateTime? to)
+        public async Task<List<Transaction>> SearchAsync(int userId, string? keyword, bool searchContains, int? categoryId, TransactionType? type, DateTime? from, DateTime? to)
         {
             using (var context = new AppDbContext())
             {
@@ -107,8 +107,13 @@ namespace SmartSaving.Repositories
                     .Where(t => t.AccountId == account.Id)
                     .AsQueryable();
 
-                if (!string.IsNullOrWhiteSpace(keyword))
-                    query = query.Where(t => t.Description.Contains(keyword));
+                if (!string.IsNullOrWhiteSpace(keyword)) {
+                    if (searchContains)
+                        query = query.Where(t => EF.Functions.ILike(t.Description, $"%{keyword}%"));
+                    else
+                        query = query.Where(t => EF.Functions.ILike(t.Description, $"{keyword}%"));
+                }
+                    
 
                 if (categoryId.HasValue)
                     query = query.Where(t => t.CategoryId == categoryId.Value);

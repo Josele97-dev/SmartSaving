@@ -34,6 +34,7 @@ namespace SmartSaving.ViewModels
             get => _successMessage;
             set { _successMessage = value; OnPropertyChanged(); }
         }
+        public Action? CloseAction { get; set; }
 
         public ICommand SaveCommand { get; }
 
@@ -79,6 +80,7 @@ namespace SmartSaving.ViewModels
                 }
                 SuccessMessage = "Budget limits saved successfully!";
                 EventAggregator.PublishCategoryChanged();
+                CloseAction?.Invoke();
             }
             catch (System.Exception)
             {

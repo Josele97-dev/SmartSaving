@@ -133,7 +133,22 @@
                               Background="Transparent"
                               BorderThickness="0"
                               Foreground="White">
-						<ListView.View>
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#FF1A2F3E"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF2A4A5E"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
 							<GridView>
 								<GridViewColumn Header="Date" Width="85"
                                                 DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>

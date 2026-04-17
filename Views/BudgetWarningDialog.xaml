@@ -6,50 +6,77 @@
         Background="#1E293B"
         ResizeMode="NoResize">
 
-    <Grid Margin="20">
+    <Grid Margin="30">
         <StackPanel>
+            <!-- Warning content -->
+            <StackPanel x:Name="WarningContent">
+                <TextBlock Text="⚠ Budget Limit Exceeded"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   Foreground="#FFF39C12"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,15"/>
 
-            <!-- Warning Icon and Title -->
-            <TextBlock Text="⚠ Budget Limit Exceeded"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       Foreground="#FFF39C12"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,15"/>
+                <TextBlock x:Name="MessageText"
+                   Foreground="White"
+                   FontSize="13"
+                   TextWrapping="Wrap"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center"
+                   Margin="0,0,0,20"/>
 
-            <!-- Message -->
-            <TextBlock x:Name="MessageText"
-                       Foreground="White"
-                       FontSize="13"
-                       TextWrapping="Wrap"
-                       HorizontalAlignment="Center"
-                       TextAlignment="Center"
-                       Margin="0,0,0,20"/>
+                <Button x:Name="ProceedButton"
+                Content="Proceed Anyway"
+                Height="35"
+                Margin="0,0,0,10"
+                Foreground="White"
+                FontWeight="Bold"
+                Click="ProceedButton_Click">
+                            <Button.Background>
+                                <SolidColorBrush Color="#E74C3C"/>
+                            </Button.Background>
+                        </Button>
 
-            <!-- Buttons -->
-            <Button Content="Proceed Anyway"
-                    Height="35"
-                    Margin="0,0,0,10"
-                    Background="#FFE74C3C"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    Click="ProceedButton_Click"/>
+                <Button x:Name="UpdateLimitButton"
+                Content="Update Budget Limit"
+                Height="35"
+                Margin="0,0,0,10"
+                Foreground="White"
+                FontWeight="Bold"
+                Click="UpdateLimitButton_Click">    
+                    <Button.Background>
+                        <SolidColorBrush Color="#8E44AD"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="CancelButton"
+                Content="Cancel"
+                Height="35"
+                Foreground="White"
+                FontWeight="Bold"
+                Click="CancelButton_Click">
+                    <Button.Background>
+                        <SolidColorBrush Color="#95A5A6"/>
+                    </Button.Background>
+                </Button>
 
-            <Button Content="Update Budget Limit"
-                    Height="35"
-                    Margin="0,0,0,10"
-                    Background="#FF8E44AD"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    Click="UpdateLimitButton_Click"/>
+            </StackPanel>
 
-            <Button Content="Cancel"
-                    Height="35"
-                    Background="#FF95A5A6"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    Click="CancelButton_Click"/>
-
+            <!-- Success message shown after proceeding -->
+            <StackPanel x:Name="SuccessContent" Visibility="Collapsed">
+                <TextBlock Text="⚠ Transaction saved"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   Foreground="#FFF39C12"
+                   HorizontalAlignment="Center"
+                   Margin="0,20,0,10"/>
+                <TextBlock Text="Budget limit has been exceeded!"
+                   FontSize="14"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center"
+                   Margin="0,0,0,20"/>
+            </StackPanel>
         </StackPanel>
+
     </Grid>
 </Window>

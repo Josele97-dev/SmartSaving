@@ -9,6 +9,7 @@ namespace SmartSaving.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+            viewModel.CloseAction = () => Close();
         }
     }
 }
