@@ -129,36 +129,44 @@
                            Margin="0,0,0,10"/>
 
 				<Border Background="#334155" CornerRadius="8" Padding="5" MinHeight="100">
-					<ListView ItemsSource="{Binding Transactions}"
-                              Background="Transparent"
-                              BorderThickness="0"
-                              Foreground="White">
-
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="#FF1A2F3E"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#FF2A4A5E"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.View>
-							<GridView>
-								<GridViewColumn Header="Date" Width="85"
-                                                DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>
-								<GridViewColumn Header="Description" Width="130"
-                                                DisplayMemberBinding="{Binding Description}"/>
-								<GridViewColumn Header="Amount" Width="90"
-                                                DisplayMemberBinding="{Binding Amount, StringFormat='€{0:N2}'}"/>
-							</GridView>
-						</ListView.View>
-					</ListView>
+					<Grid>
+						<ListView ItemsSource="{Binding Transactions}"
+								  Background="Transparent"
+								  BorderThickness="0"
+								  Foreground="White">
+							<ListView.ItemContainerStyle>
+								<Style TargetType="ListViewItem">
+									<Style.Triggers>
+										<Trigger Property="IsSelected" Value="True">
+											<Setter Property="Background" Value="#FF1A2F3E"/>
+											<Setter Property="Foreground" Value="White"/>
+										</Trigger>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter Property="Background" Value="#FF2A4A5E"/>
+											<Setter Property="Foreground" Value="White"/>
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</ListView.ItemContainerStyle>
+							<ListView.View>
+								<GridView>
+									<GridViewColumn Header="Date" Width="85"
+													DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+									<GridViewColumn Header="Description" Width="130"
+													DisplayMemberBinding="{Binding Description}"/>
+									<GridViewColumn Header="Amount" Width="90"
+													DisplayMemberBinding="{Binding Amount, StringFormat='€{0:N2}'}"/>
+								</GridView>
+							</ListView.View>
+						</ListView>
+						<TextBlock Text="No transactions yet — your history will appear here."
+								   Visibility="{Binding HasNoTransactions, Converter={StaticResource BoolToVisibilityConverter}}"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"
+								   Foreground="#FFBDC3C7"
+								   FontStyle="Italic"
+								   FontSize="13"/>
+					</Grid>
 				</Border>
 
 				<!-- Refresh Button -->

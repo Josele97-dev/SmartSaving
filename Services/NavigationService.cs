@@ -64,5 +64,12 @@ namespace SmartSaving.Services
             var window = new SearchWindow(vm);
             window.Show();
         }
+
+        public void OpenMonthlyTransactionsWindow(User user)
+        {
+            var vm = new MonthlyTransactionsViewModel(_transactionService,this,  user);
+            var window = new MonthlyTransactionsWindow(vm);
+            window.Show();
+        }
     }
 }

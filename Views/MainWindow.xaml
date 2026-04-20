@@ -63,6 +63,65 @@
 						</StackPanel>
 					</Border>
 				</Grid>
+				<TextBlock Text="This Month"
+           Foreground="White"
+           FontSize="16"
+           FontWeight="Bold"
+           Margin="0,0,0,10"/>
+
+				<Border Background="#FF34495E" CornerRadius="8" Padding="15" Margin="0,0,0,15">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<!-- Monthly Income -->
+						<StackPanel Grid.Column="0" HorizontalAlignment="Center">
+							<TextBlock Text="Income"
+									   Foreground="#FFBDC3C7"
+									   FontSize="12"
+									   HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding MonthlyIncome, StringFormat='€{0:N2}'}"
+									   Foreground="#FF27AE60"
+									   FontSize="15"
+									   FontWeight="Bold"
+									   HorizontalAlignment="Center"
+									   Margin="0,4,0,0"/>
+						</StackPanel>
+
+						<!-- Monthly Expenses -->
+						<StackPanel Grid.Column="1" HorizontalAlignment="Center">
+							<TextBlock Text="Expenses"
+									   Foreground="#FFBDC3C7"
+									   FontSize="12"
+									   HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding MonthlyExpenses, StringFormat='€{0:N2}'}"
+									   Foreground="#FFE74C3C"
+									   FontSize="15"
+									   FontWeight="Bold"
+									   HorizontalAlignment="Center"
+									   Margin="0,4,0,0"/>
+						</StackPanel>
+
+						<!-- Monthly Net -->
+						<StackPanel Grid.Column="2" HorizontalAlignment="Center">
+							<TextBlock Text="Net"
+									   Foreground="#FFBDC3C7"
+									   FontSize="12"
+									   HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding MonthlyNet, StringFormat='€{0:N2}'}"
+									   Foreground="{Binding MonthlyNetColour}"
+									   FontSize="15"
+									   FontWeight="Bold"
+									   HorizontalAlignment="Center"
+									   Margin="0,4,0,0"/>
+						</StackPanel>
+
+					</Grid>
+				</Border>
+				
                 <TextBlock Text="Budget Progress"
            Foreground="White"
            FontSize="16"
@@ -98,65 +157,93 @@
                 </Border>
                 
                 <!-- Recent Transactions -->
-                <Grid Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+				<Grid Margin="0,0,0,10">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="10"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0"
-               Text="Recent Transactions"
-               Foreground="White"
-               FontSize="16"
-               FontWeight="Bold"
-               VerticalAlignment="Center"/>
+					<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+						<TextBlock Text="Recent Transactions"
+								   Foreground="White"
+								   FontSize="16"
+								   FontWeight="Bold"
+								   VerticalAlignment="Center"/>
+						<Border Background="#FF3498DB"
+								CornerRadius="10"
+								Padding="6,2"
+								Margin="8,0,0,0"
+								VerticalAlignment="Center">
+							<TextBlock Text="{Binding MonthlyTransactionCount}"
+									   Foreground="White"
+									   FontSize="11"
+									   FontWeight="Bold"/>
+						</Border>
+					</StackPanel>
 
-                    <Button Grid.Column="1"
-            Content="Search"
-            Height="28"
-            Width="70"
-            Background="#FF3498DB"
-            Foreground="White"
-            FontWeight="Bold"
-            Command="{Binding SearchCommand}"/>
-                </Grid>
+					<Button Grid.Column="1"
+							Content="View All"
+							Height="28"
+							Width="70"
+							Background="#FF8E44AD"
+							Foreground="White"
+							FontWeight="Bold"
+							Command="{Binding ViewMonthlyCommand}"/>
 
-                <Border Background="#FF34495E" CornerRadius="8" Padding="5" MinHeight="120">
-					<ListView ItemsSource="{Binding RecentTransactions}"
-                              Background="Transparent"
-                              BorderThickness="0"
-                              Foreground="White"
-                              SelectedItem="{Binding SelectedTransaction}"
-                              MouseDoubleClick="ListView_MouseDoubleClick">
+					<Button Grid.Column="3"
+							Content="Search"
+							Height="28"
+							Width="70"
+							Background="#FF3498DB"
+							Foreground="White"
+							FontWeight="Bold"
+							Command="{Binding SearchCommand}"/>
+				</Grid>
 
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="#FF1A2F3E"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#FF2A4A5E"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        
-                        <ListView.View>
-							<GridView>
-								<GridViewColumn Header="Date" Width="90"
-                                                DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>
-								<GridViewColumn Header="Description" Width="150"
-                                                DisplayMemberBinding="{Binding Description}"/>
-								<GridViewColumn Header="Amount" Width="100"
-                                                DisplayMemberBinding="{Binding Amount, StringFormat='€{0:N2}'}"/>
-							</GridView>
-						</ListView.View>
-					</ListView>
+				<Border Background="#FF34495E" CornerRadius="8" Padding="5" MinHeight="120">
+					<Grid>
+						<ListView ItemsSource="{Binding RecentTransactions}"
+								  Background="Transparent"
+								  BorderThickness="0"
+								  Foreground="White"
+								  SelectedItem="{Binding SelectedTransaction}"
+								  MouseDoubleClick="ListView_MouseDoubleClick">
+							<ListView.ItemContainerStyle>
+								<Style TargetType="ListViewItem">
+									<Style.Triggers>
+										<Trigger Property="IsSelected" Value="True">
+											<Setter Property="Background" Value="#FF1A2F3E"/>
+											<Setter Property="Foreground" Value="White"/>
+										</Trigger>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter Property="Background" Value="#FF2A4A5E"/>
+											<Setter Property="Foreground" Value="White"/>
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</ListView.ItemContainerStyle>
+							<ListView.View>
+								<GridView>
+									<GridViewColumn Header="Date" Width="90"
+													DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+									<GridViewColumn Header="Description" Width="150"
+													DisplayMemberBinding="{Binding Description}"/>
+									<GridViewColumn Header="Amount" Width="100"
+													DisplayMemberBinding="{Binding Amount, StringFormat='€{0:N2}'}"/>
+								</GridView>
+							</ListView.View>
+						</ListView>
+						<TextBlock Text="No transactions yet — add your first one!"
+								   Visibility="{Binding HasNoTransactions, Converter={StaticResource BoolToVisibilityConverter}}"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"
+								   Foreground="#FFBDC3C7"
+								   FontStyle="Italic"
+								   FontSize="13"/>
+					</Grid>
 				</Border>
-
 				<!-- Buttons -->
 				<Grid Margin="0,15,0,0">
 					<Grid.ColumnDefinitions>

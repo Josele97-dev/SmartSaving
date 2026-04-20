@@ -43,24 +43,56 @@ namespace SmartSaving.ViewModels
             set { _totalExpenses = value; OnPropertyChanged(); }
         }
 
+        private decimal _monthlyIncome;
+        public decimal MonthlyIncome
+        {
+            get => _monthlyIncome;
+            set { _monthlyIncome = value; OnPropertyChanged(); }
+        }
+
+        private decimal _monthlyExpenses;
+        public decimal MonthlyExpenses
+        {
+            get => _monthlyExpenses;
+            set { _monthlyExpenses = value; OnPropertyChanged(); }
+        }
+
+        private decimal _monthlyNet;
+        public decimal MonthlyNet
+        {
+            get => _monthlyNet;
+            set { _monthlyNet = value; OnPropertyChanged(); OnPropertyChanged(nameof(MonthlyNetColour)); }
+        }
+
+        public string MonthlyNetColour => _monthlyNet >= 0 ? "#FF27AE60" : "#FFE74C3C";
+
         private DateTime _lastRefreshed;
         public DateTime LastRefreshed
         {
             get => _lastRefreshed;
             set { _lastRefreshed = value; OnPropertyChanged(); OnPropertyChanged(nameof(LastRefreshedText)); }
         }
+
         public string LastRefreshedText => $"Last updated: {_lastRefreshed:dd/MM/yyyy HH:mm}";
+
         public ObservableCollection<Transaction> RecentTransactions
         {
             get => _recentTransactions;
-            set { _recentTransactions = value; OnPropertyChanged(); }
+            set { _recentTransactions = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasNoTransactions)); }
         }
+        public bool HasNoTransactions => RecentTransactions == null || !RecentTransactions.Any();
 
         private Transaction? _selectedTransaction;
         public Transaction? SelectedTransaction
         {
             get => _selectedTransaction;
             set { _selectedTransaction = value; OnPropertyChanged(); }
+        }
+        private int _monthlyTransactionCount;
+        public int MonthlyTransactionCount
+        {
+            get => _monthlyTransactionCount;
+            set { _monthlyTransactionCount = value; OnPropertyChanged(); }
         }
 
         private ObservableCollection<CategoryBudgetProgress> _categoryProgress = new();
@@ -71,7 +103,18 @@ namespace SmartSaving.ViewModels
         }
 
 
-        public string WelcomeMessage => $"Welcome, {_currentUser.FirstName}!";
+        public string WelcomeMessage
+        {
+            get
+            { 
+                var hour = DateTime.Now.Hour;
+                var greeting = hour < 12 ? "Good morning"
+                             : hour < 18 ? "Good afternoon"
+                             : "Good evening";
+                return $"{greeting}, {_currentUser.FirstName}!";
+            }
+
+        }
 
         public ICommand OpenTransactionCommand { get; }
         public ICommand RefreshCommand { get; }
@@ -83,6 +126,7 @@ namespace SmartSaving.ViewModels
         public ICommand ManageCategoriesCommand { get; }
 
         public ICommand SearchCommand { get; }
+        public ICommand ViewMonthlyCommand { get; }
 
         public MainViewModel(INavigationService navigationService, ITransactionService transactionService, IAccountRepository accountRepository, ICategoryRepository categoryRepository, User user)
         {
@@ -98,6 +142,7 @@ namespace SmartSaving.ViewModels
             EditTransactionCommand = new RelayCommand(EditTransaction);
             ManageCategoriesCommand = new RelayCommand(OpenManageCategories);
             SearchCommand = new RelayCommand(OpenSearch);
+            ViewMonthlyCommand = new RelayCommand(OpenMonthlyTransactions);
 
             // Load balance from the user's default account
             var defaultAccount = user.Accounts?.FirstOrDefault();
@@ -131,6 +176,22 @@ namespace SmartSaving.ViewModels
                     .Sum(t => t.Amount);
 
                 Balance = TotalIncome - TotalExpenses;
+
+                var now = DateTime.Now;
+                var thisMonth = transactions
+                    .Where(t => t.Date.Month == now.Month && t.Date.Year == now.Year)
+                    .ToList();
+
+                MonthlyIncome = thisMonth
+                    .Where(t => t.Type == TransactionType.Income)
+                    .Sum(t => t.Amount);
+
+                MonthlyExpenses = thisMonth
+                    .Where(t => t.Type == TransactionType.Expense)
+                    .Sum(t => t.Amount);
+
+                MonthlyNet = MonthlyIncome - MonthlyExpenses;
+                MonthlyTransactionCount = thisMonth.Count();
 
                 // Load category budget progress
                 if (freshAccount != null)
@@ -201,6 +262,11 @@ namespace SmartSaving.ViewModels
         private void OpenSearch()
         {
             _navigationService.OpenSearchWindow(_currentUser);
+        }
+
+        private void OpenMonthlyTransactions()
+        {
+            _navigationService.OpenMonthlyTransactionsWindow(_currentUser);
         }
     }
     public class CategoryBudgetProgress

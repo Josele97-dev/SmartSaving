@@ -130,8 +130,9 @@ namespace SmartSaving.ViewModels
         public ObservableCollection<Transaction> Transactions
         {
             get => _transactions;
-            set { _transactions = value; OnPropertyChanged(); }
+            set { _transactions = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasNoTransactions)); }
         }
+        public bool HasNoTransactions => _transactions == null || !_transactions.Any();
 
         // ---- Edit mode support ----
 

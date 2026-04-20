@@ -4,6 +4,7 @@ using SmartSaving.Models;
 using SmartSaving.Repositories;
 using SmartSaving.Services;
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -93,8 +94,9 @@ namespace SmartSaving.ViewModels
         public ObservableCollection<Transaction> Results
         {
             get => _results;
-            set { _results = value; OnPropertyChanged(); }
+            set { _results = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasNoResults)); }
         }
+        public bool HasNoResults => _results == null || !_results.Any();
 
         private Transaction? _selectedTransaction;
         public Transaction? SelectedTransaction
