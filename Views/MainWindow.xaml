@@ -18,20 +18,36 @@
                            Margin="0,0,0,20"/>
 
 				<!-- Balance Card -->
-				<Border Background="#FF34495E" CornerRadius="10" Padding="20" Margin="0,0,0,15">
-					<StackPanel>
-						<TextBlock Text="Current Balance"
-                                   Foreground="#FFBDC3C7"
-                                   FontSize="14"/>
-						<TextBlock Text="{Binding Balance, StringFormat='€{0:N2}'}"
-                                   Foreground="White"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Margin="0,5,0,0"/>
-					</StackPanel>
-				</Border>
+                <Button Command="{Binding SearchCommand}" Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <ContentPresenter/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    <Border Background="#FF34495E" CornerRadius="10" Padding="20" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Current Balance"
+                       Foreground="#FFBDC3C7"
+                       FontSize="14"/>
+                            <TextBlock Text="{Binding Balance, StringFormat='€{0:N2}'}"
+                       Foreground="White"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Button>
 
-				<!-- Income / Expenses Summary -->
+                <!-- Income / Expenses Summary -->
 				<Grid Margin="0,0,0,15">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*"/>
@@ -40,30 +56,72 @@
 					</Grid.ColumnDefinitions>
 
 					<!-- Income -->
-					<Border Grid.Column="0" Background="#FF27AE60" CornerRadius="8" Padding="15">
-						<StackPanel>
-							<TextBlock Text="Income" Foreground="White" FontSize="12"/>
-							<TextBlock Text="{Binding TotalIncome, StringFormat='€{0:N2}'}"
-                                       Foreground="White"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       Margin="0,5,0,0"/>
-						</StackPanel>
-					</Border>
+                    <Button Grid.Column="0"  Command="{Binding ViewMonthlyCommand}" Cursor="Hand"
+						BorderThickness="0" Background="Transparent" Padding="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <Border Background="#FF27AE60" CornerRadius="8" Padding="15">
+                            <StackPanel>
+                                <TextBlock Text="Income" Foreground="White" FontSize="12"/>
+                                <TextBlock Text="{Binding TotalIncome, StringFormat='€{0:N2}'}"
+                       Foreground="White"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Button>
 
-					<!-- Expenses -->
-					<Border Grid.Column="2" Background="#FFE74C3C" CornerRadius="8" Padding="15">
-						<StackPanel>
-							<TextBlock Text="Expenses" Foreground="White" FontSize="12"/>
-							<TextBlock Text="{Binding TotalExpenses, StringFormat='€{0:N2}'}"
-                                       Foreground="White"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       Margin="0,5,0,0"/>
-						</StackPanel>
-					</Border>
-				</Grid>
-				<TextBlock Text="This Month"
+                    <!-- Expenses -->
+                    <Button Grid.Column="2" Command="{Binding ViewMonthlyCommand}" Cursor="Hand"
+					 BorderThickness="0" Background="Transparent" Padding="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <Border Background="#FFE74C3C" CornerRadius="8" Padding="15">
+                            <StackPanel>
+                                <TextBlock Text="Expenses" Foreground="White" FontSize="12"/>
+                                <TextBlock Text="{Binding TotalExpenses, StringFormat='€{0:N2}'}"
+                       Foreground="White"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Button>
+                </Grid>
+                <Button Content="Transfer Funds"
+                Height="35"
+                Margin="0,0,0,15"
+                Background="#FF1ABC9C"
+                Foreground="White"
+                FontWeight="Bold"
+                Command="{Binding TransferCommand}"/>
+
+                <TextBlock Text="This Month"
            Foreground="White"
            FontSize="16"
            FontWeight="Bold"
@@ -230,9 +288,14 @@
 													DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>
 									<GridViewColumn Header="Description" Width="150"
 													DisplayMemberBinding="{Binding Description}"/>
-									<GridViewColumn Header="Amount" Width="100"
-													DisplayMemberBinding="{Binding Amount, StringFormat='€{0:N2}'}"/>
-								</GridView>
+                                    <GridViewColumn Header="Amount" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource TransactionAmountConverter}}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
 							</ListView.View>
 						</ListView>
 						<TextBlock Text="No transactions yet — add your first one!"

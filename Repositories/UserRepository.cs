@@ -37,5 +37,15 @@ namespace SmartSaving.Repositories
                 return await context.SaveChangesAsync() > 0;
             }
         }
+
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            using (var context = new AppDbContext())
+            {
+                return await context.Users
+                    .Include(u => u.Accounts)
+                    .ToListAsync();
+            }
+        }
     }
 }

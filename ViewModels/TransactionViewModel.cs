@@ -55,6 +55,7 @@ namespace SmartSaving.ViewModels
             {
                 _selectedTransactionType = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsExpenseType));
                 UpdateFilteredCategories();
             }
         }
@@ -133,6 +134,8 @@ namespace SmartSaving.ViewModels
             set { _transactions = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasNoTransactions)); }
         }
         public bool HasNoTransactions => _transactions == null || !_transactions.Any();
+
+        public bool IsExpenseType => SelectedTransactionType == "Expense";
 
         // ---- Edit mode support ----
 
@@ -230,7 +233,7 @@ namespace SmartSaving.ViewModels
             try
             {
                 var list = await _transactionService.GetTransactionsAsync(_currentUser.Id);
-                Transactions = new ObservableCollection<Transaction>(list);
+                Transactions = new ObservableCollection<Transaction>(list.Take(10));
             }
             catch (Exception)
             {

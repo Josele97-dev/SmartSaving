@@ -11,6 +11,7 @@ namespace SmartSaving.Services
         void OpenManageCategoriesWindow(User user);
         void OpenSearchWindow(User user);
         void OpenMonthlyTransactionsWindow(User user);
+        void OpenTransferWindow(User user);
     }
 }
 

@@ -75,7 +75,77 @@ namespace SmartSaving.Services
 
             return account;
         }
-       
+
+        public async Task TransferAsync(User sender, User recipient, decimal amount, string description)
+        {
+            var senderAccount = await _accountRepository.GetDefaultByUserIdAsync(sender.Id);
+            var recipientAccount = await _accountRepository.GetDefaultByUserIdAsync(recipient.Id);
+
+            if (senderAccount == null || recipientAccount == null)
+                throw new InvalidOperationException("Could not find accounts for the transfer.");
+
+            if (amount <= 0)
+                throw new ArgumentException("Transfer amount must be greater than zero.");
+
+            if (senderAccount.CurrentBalance < amount)
+                throw new InvalidOperationException("Insufficient balance to complete this transfer.");
+
+            // Get or create Transfer Out category for sender
+            var senderCategories = await _categoryRepository.GetAllByAccountIdAsync(senderAccount.Id);
+            var transferOutCategory = senderCategories.FirstOrDefault(c => c.Title == "Transfer Out");
+            if (transferOutCategory == null)
+            {
+                transferOutCategory = new Category
+                {
+                    AccountId = senderAccount.Id,
+                    Title = "Transfer Out",
+                    Type = TransactionType.Expense
+                };
+                await _categoryRepository.AddAsync(transferOutCategory);
+            }
+
+            // Get or create Transfer In category for recipient
+            var recipientCategories = await _categoryRepository.GetAllByAccountIdAsync(recipientAccount.Id);
+            var transferInCategory = recipientCategories.FirstOrDefault(c => c.Title == "Transfer In");
+            if (transferInCategory == null)
+            {
+                transferInCategory = new Category
+                {
+                    AccountId = recipientAccount.Id,
+                    Title = "Transfer In",
+                    Type = TransactionType.Income
+                };
+                await _categoryRepository.AddAsync(transferInCategory);
+            }
+
+            // Create expense transaction on sender's account
+            var outTransaction = new Transaction
+            {
+                AccountId = senderAccount.Id,
+                CategoryId = transferOutCategory.Id,
+                Amount = amount,
+                Date = DateTime.UtcNow,
+                Description = string.IsNullOrWhiteSpace(description)
+                    ? $"Transfer to {recipient.FirstName} {recipient.LastName}"
+                    : description
+            };
+
+            // Create income transaction on recipient's account
+            var inTransaction = new Transaction
+            {
+                AccountId = recipientAccount.Id,
+                CategoryId = transferInCategory.Id,
+                Amount = amount,
+                Date = DateTime.UtcNow,
+                Description = string.IsNullOrWhiteSpace(description)
+                    ? $"Transfer from {sender.FirstName} {sender.LastName}"
+                    : description
+            };
+
+            await _transactionRepository.AddAsync(outTransaction);
+            await _transactionRepository.AddAsync(inTransaction);
+        }
+
 
     }
 }

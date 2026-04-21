@@ -106,7 +106,7 @@ namespace SmartSaving.ViewModels
         public string WelcomeMessage
         {
             get
-            { 
+            {
                 var hour = DateTime.Now.Hour;
                 var greeting = hour < 12 ? "Good morning"
                              : hour < 18 ? "Good afternoon"
@@ -127,6 +127,7 @@ namespace SmartSaving.ViewModels
 
         public ICommand SearchCommand { get; }
         public ICommand ViewMonthlyCommand { get; }
+        public ICommand TransferCommand { get; }
 
         public MainViewModel(INavigationService navigationService, ITransactionService transactionService, IAccountRepository accountRepository, ICategoryRepository categoryRepository, User user)
         {
@@ -143,6 +144,7 @@ namespace SmartSaving.ViewModels
             ManageCategoriesCommand = new RelayCommand(OpenManageCategories);
             SearchCommand = new RelayCommand(OpenSearch);
             ViewMonthlyCommand = new RelayCommand(OpenMonthlyTransactions);
+            TransferCommand = new RelayCommand(OpenTransfer);
 
             // Load balance from the user's default account
             var defaultAccount = user.Accounts?.FirstOrDefault();
@@ -268,6 +270,13 @@ namespace SmartSaving.ViewModels
         {
             _navigationService.OpenMonthlyTransactionsWindow(_currentUser);
         }
+    
+
+         private void OpenTransfer()
+        {
+            _navigationService.OpenTransferWindow(_currentUser);
+        }
+
     }
     public class CategoryBudgetProgress
     {

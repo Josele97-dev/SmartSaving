@@ -7,6 +7,7 @@
 		<utils:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <utils:PercentageToWidthConverter x:Key="PercentageToWidthConverter"/>
 		<utils:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <utils:TransactionAmountConverter x:Key="TransactionAmountConverter"/>
         
     </Application.Resources>
 </Application>

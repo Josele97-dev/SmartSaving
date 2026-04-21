@@ -78,45 +78,36 @@
                         </DataTemplate>
                         </ComboBox.ItemTemplate>
                         </ComboBox>
+
                         <TextBlock Text="Monthly Budget Limit (leave empty for no limit)" 
-                                   Foreground="White" 
-                                   Margin="0,5,0,0"/>
+           Foreground="White" 
+           Margin="0,5,0,0"
+           Visibility="{Binding IsExpenseType, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
                         <TextBox Margin="0,5,0,20"
-                                 Background="#FFECF0F1"
-                                 Padding="5"
-                                 Text="{Binding BudgetLimit, UpdateSourceTrigger=PropertyChanged}"/>
+         Background="#FFECF0F1"
+         Padding="5"
+         Text="{Binding BudgetLimit, UpdateSourceTrigger=PropertyChanged}"
+         Visibility="{Binding IsExpenseType, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                        <!-- Save Button -->
                         <Button Content="Save Limit"
-                                Height="25"
-                                Background="DeepSkyBlue"
-                                Foreground="White"
-                                FontWeight="Bold"
-                                Command="{Binding SaveCommand}" />
+                        Height="25"
+                        Margin="0,0,0,20"
+                        Background="DeepSkyBlue"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Command="{Binding SaveCommand}"
+                        Visibility="{Binding IsExpenseType, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                         <!-- Save Button -->
-						<Button Content="Save Transaction"
-                                Height="35"
-                                Margin="0,20,0,0"
-                                Background="#FF1ABC9C"
-                                Foreground="White"
-                                FontWeight="Bold"
-                                IsEnabled="{Binding IsEditableTransaction}"
-                                Command="{Binding SaveCommand}">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Background" Value="#FF1ABC9C"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsEnabled" Value="False">
-                                            <Setter Property="Background" Value="#FF95A5A6"/>
-                                            <Setter Property="Foreground" Value="#FF2C3E50"/>
-                                            <Setter Property="Opacity" Value="0.7"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                        <Button Content="Save Transaction"
+                        Height="35"
+                        Margin="0,20,0,0"
+                        Background="#FF1ABC9C"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Command="{Binding SaveCommand}"
+                        Visibility="{Binding IsExpenseType, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     </StackPanel>
 				</Border>
@@ -154,9 +145,14 @@
 													DisplayMemberBinding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>
 									<GridViewColumn Header="Description" Width="130"
 													DisplayMemberBinding="{Binding Description}"/>
-									<GridViewColumn Header="Amount" Width="90"
-													DisplayMemberBinding="{Binding Amount, StringFormat='€{0:N2}'}"/>
-								</GridView>
+                                    <GridViewColumn Header="Amount" Width="90">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource TransactionAmountConverter}}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
 							</ListView.View>
 						</ListView>
 						<TextBlock Text="No transactions yet — your history will appear here."
