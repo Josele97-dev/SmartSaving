@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SmartSaving.Models;
@@ -135,9 +135,10 @@ namespace SmartSaving.Services
                 Amount = amount,
                 Date = DateTime.UtcNow,
                 Description = string.IsNullOrWhiteSpace(description)
-                    ? $"Transfer to {recipient.FirstName} {recipient.LastName}"
-                    : description
+                ? $"Transfer to {recipient.FirstName} {recipient.LastName}"
+                : $"{description} → {recipient.FirstName} {recipient.LastName}"
             };
+        
 
             // Create income transaction on recipient's account
             var inTransaction = new Transaction
@@ -147,8 +148,8 @@ namespace SmartSaving.Services
                 Amount = amount,
                 Date = DateTime.UtcNow,
                 Description = string.IsNullOrWhiteSpace(description)
-                    ? $"Transfer from {sender.FirstName} {sender.LastName}"
-                    : description
+                ? $"Transfer from {sender.FirstName} {sender.LastName}"
+                : $"{description} ← {sender.FirstName} {sender.LastName}"
             };
 
             await _transactionRepository.AddAsync(outTransaction);

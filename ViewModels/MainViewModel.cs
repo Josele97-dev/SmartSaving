@@ -101,8 +101,6 @@ namespace SmartSaving.ViewModels
             get => _categoryProgress;
             set { _categoryProgress = value; OnPropertyChanged(); }
         }
-
-
         public string WelcomeMessage
         {
             get
@@ -128,6 +126,7 @@ namespace SmartSaving.ViewModels
         public ICommand SearchCommand { get; }
         public ICommand ViewMonthlyCommand { get; }
         public ICommand TransferCommand { get; }
+        public ICommand TransfersRecordCommand { get; }
 
         public MainViewModel(INavigationService navigationService, ITransactionService transactionService, IAccountRepository accountRepository, ICategoryRepository categoryRepository, User user)
         {
@@ -145,6 +144,7 @@ namespace SmartSaving.ViewModels
             SearchCommand = new RelayCommand(OpenSearch);
             ViewMonthlyCommand = new RelayCommand(OpenMonthlyTransactions);
             TransferCommand = new RelayCommand(OpenTransfer);
+            TransfersRecordCommand = new RelayCommand(OpenTransfersRecord);
 
             // Load balance from the user's default account
             var defaultAccount = user.Accounts?.FirstOrDefault();
@@ -270,14 +270,21 @@ namespace SmartSaving.ViewModels
         {
             _navigationService.OpenMonthlyTransactionsWindow(_currentUser);
         }
-    
 
-         private void OpenTransfer()
+
+        private void OpenTransfer()
         {
             _navigationService.OpenTransferWindow(_currentUser);
         }
 
+    
+        private void OpenTransfersRecord()
+        {
+            _navigationService.OpenTransfersRecordWindow(_currentUser);
+        }
     }
+
+
     public class CategoryBudgetProgress
     {
         public string CategoryName { get; set; } = string.Empty;

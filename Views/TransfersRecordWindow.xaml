@@ -1,0 +1,130 @@
+﻿<Window x:Class="SmartSaving.Views.TransfersRecordWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmartSaving.Views"
+        mc:Ignorable="d"
+        Title="TransfersRecordWindow" Height="650" Width="800">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#1E293B">
+            <StackPanel Background="#1E293B">
+
+                <!-- Month Title -->
+                <TextBlock Text="{Binding MonthTitle}"
+                           Foreground="White"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,20"/>
+
+                <!-- Sent Section -->
+                <TextBlock Text="Sent"
+                           Foreground="#FFE74C3C"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+
+                <Border Background="#3A1A1A" CornerRadius="8" Padding="5" MinHeight="80" Margin="0,0,0,20">
+                    <Grid>
+                        <ListView ItemsSource="{Binding SentTransfers}"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Foreground="White"
+                                  SelectionChanged="ListView_SelectionChanged">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FF2A4A5E"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Date" Width="85"
+                                     DisplayMemberBinding="{Binding Date}"/>
+                                    <GridViewColumn Header="Sent To" Width="130"
+                                    DisplayMemberBinding="{Binding PersonName}"/>
+                                    <GridViewColumn Header="Note" Width="100"
+                                    DisplayMemberBinding="{Binding Note}"/>
+                                    <GridViewColumn Header="Amount" Width="80"
+                                    DisplayMemberBinding="{Binding Amount, StringFormat='-€{0:N2}'}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <TextBlock Text="No transfers sent this month."
+                                   Visibility="{Binding HasNoSent, Converter={StaticResource BoolToVisibilityConverter}}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="#FFBDC3C7"
+                                   FontStyle="Italic"
+                                   FontSize="13"/>
+                    </Grid>
+                </Border>
+
+                <!-- Received Section -->
+                <TextBlock Text="Received"
+                           Foreground="#FF27AE60"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+
+                <Border Background="#1A3A2A" CornerRadius="8" Padding="5" MinHeight="80" Margin="0,0,0,20">
+                    <Grid>
+                        <ListView ItemsSource="{Binding ReceivedTransfers}"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Foreground="White"
+                                  SelectionChanged="ListView_SelectionChanged">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FF2A4A5E"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Date" Width="85"
+                                    DisplayMemberBinding="{Binding Date}"/>
+                                    <GridViewColumn Header="Received From" Width="130"
+                                    DisplayMemberBinding="{Binding PersonName}"/>
+                                    <GridViewColumn Header="Note" Width="100"
+                                    DisplayMemberBinding="{Binding Note}"/>
+                                    <GridViewColumn Header="Amount" Width="80"
+                DisplayMemberBinding="{Binding Amount, StringFormat='€{0:N2}'}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <TextBlock Text="No transfers received this month."
+                                   Visibility="{Binding HasNoReceived, Converter={StaticResource BoolToVisibilityConverter}}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="#FFBDC3C7"
+                                   FontStyle="Italic"
+                                   FontSize="13"/>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

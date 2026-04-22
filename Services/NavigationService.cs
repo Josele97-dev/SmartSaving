@@ -80,5 +80,11 @@ namespace SmartSaving.Services
             var window = new TransferWindow(vm);
             window.Show();
         }
+        public void OpenTransfersRecordWindow(User user)
+        {
+            var vm = new TransfersRecordViewModel(_transactionService, user);
+            var window = new TransfersRecordWindow(vm);
+            window.Show();
+        }
     }
 }

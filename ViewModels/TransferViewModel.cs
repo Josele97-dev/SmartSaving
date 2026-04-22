@@ -19,6 +19,9 @@ namespace SmartSaving.ViewModels
 
         public Action? CloseAction { get; set; }
 
+        public Func<string, decimal, Task<bool>>? RequestConfirmAction { get; set; }
+        public Action<string, decimal>? ShowSuccessAction { get; set; }
+
         private ObservableCollection<User> _availableRecipients = new();
         public ObservableCollection<User> AvailableRecipients
         {
@@ -31,6 +34,12 @@ namespace SmartSaving.ViewModels
         {
             get => _selectedRecipient;
             set { _selectedRecipient = value; OnPropertyChanged(); }
+        }
+        private decimal _currentBalance;
+        public decimal CurrentBalance
+        {
+            get => _currentBalance;
+            set { _currentBalance = value; OnPropertyChanged(); }
         }
 
         private decimal _amount;
@@ -46,14 +55,13 @@ namespace SmartSaving.ViewModels
             get => _description;
             set { _description = value; OnPropertyChanged(); }
         }
-
         private string _errorMessage = string.Empty;
         public string ErrorMessage
         {
             get => _errorMessage;
             set { _errorMessage = value; OnPropertyChanged(); }
         }
-
+        
         public ICommand TransferCommand { get; }
 
         public TransferViewModel(ITransactionService transactionService, IUserRepository userRepository, User currentUser)
@@ -67,6 +75,14 @@ namespace SmartSaving.ViewModels
             _ = LoadRecipientsAsync();
         }
 
+        public void ClearForm()
+        {
+            SelectedRecipient = null;
+            Amount = 0;
+            Description = string.Empty;
+            ErrorMessage = string.Empty;
+        }
+
         private async Task LoadRecipientsAsync()
         {
             try
@@ -74,6 +90,10 @@ namespace SmartSaving.ViewModels
                 var allUsers = await _userRepository.GetAllUsersAsync();
                 var others = allUsers.Where(u => u.Id != _currentUser.Id).ToList();
                 AvailableRecipients = new ObservableCollection<User>(others);
+
+                var transactions = await _transactionService.GetTransactionsAsync(_currentUser.Id);
+                CurrentBalance = transactions.Where(t => t.Type == TransactionType.Income).Sum(t => t.Amount)
+                               - transactions.Where(t => t.Type == TransactionType.Expense).Sum(t => t.Amount);
             }
             catch (Exception)
             {
@@ -97,10 +117,23 @@ namespace SmartSaving.ViewModels
                 return;
             }
 
+            if (RequestConfirmAction != null)
+            {
+                var confirmed = await RequestConfirmAction.Invoke(
+                    $"{SelectedRecipient.FirstName} {SelectedRecipient.LastName}", Amount);
+                if (!confirmed) return;
+            }
+
             try
             {
+                var recipientName = $"{SelectedRecipient.FirstName} {SelectedRecipient.LastName}";
+                var amount = Amount;
+
                 await _transactionService.TransferAsync(_currentUser, SelectedRecipient, Amount, Description);
                 EventAggregator.PublishTransactionChanged();
+
+                ShowSuccessAction?.Invoke(recipientName, amount);
+                await Task.Delay(2500);
                 CloseAction?.Invoke();
             }
             catch (InvalidOperationException ex)

@@ -121,6 +121,14 @@
                 FontWeight="Bold"
                 Command="{Binding TransferCommand}"/>
 
+                <Button Content="Transfer Record"
+                Height="25"
+                Margin="0,5,0,0"
+                Background="#FF2980B9"
+                Foreground="White"
+                FontWeight="Bold"
+                Command="{Binding TransfersRecordCommand}"/>
+
                 <TextBlock Text="This Month"
            Foreground="White"
            FontSize="16"
