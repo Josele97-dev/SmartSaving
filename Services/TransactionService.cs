@@ -87,9 +87,18 @@ namespace SmartSaving.Services
             if (amount <= 0)
                 throw new ArgumentException("Transfer amount must be greater than zero.");
 
-            if (senderAccount.CurrentBalance < amount)
-                throw new InvalidOperationException("Insufficient balance to complete this transfer.");
+            var senderTransactions = await _transactionRepository.GetByAccountIdAsync(senderAccount.Id);
+            var realBalance = senderTransactions
+                .Where(t => t.Type == TransactionType.Income)
+                .Sum(t => t.Amount)
+                - senderTransactions
+                .Where(t => t.Type == TransactionType.Expense)
+                .Sum(t => t.Amount);
 
+            if (realBalance < amount)
+                throw new InvalidOperationException("Insufficient balance to complete this transfer.");
+           
+            
             // Get or create Transfer Out category for sender
             var senderCategories = await _categoryRepository.GetAllByAccountIdAsync(senderAccount.Id);
             var transferOutCategory = senderCategories.FirstOrDefault(c => c.Title == "Transfer Out");

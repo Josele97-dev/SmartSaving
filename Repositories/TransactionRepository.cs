@@ -43,6 +43,17 @@ namespace SmartSaving.Repositories
             }
         }
 
+        public async Task<List<Transaction>> GetByAccountIdAsync(int accountId)
+        {
+            using (var context = new AppDbContext())
+            {
+                return await context.Transactions
+                    .Include(t => t.Category)
+                    .Where(t => t.AccountId == accountId)
+                    .ToListAsync();
+            }
+        }
+
         public async Task<bool> AddAsync(Transaction transaction)
         {
             using (var context = new AppDbContext())
