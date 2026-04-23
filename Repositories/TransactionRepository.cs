@@ -143,5 +143,34 @@ namespace SmartSaving.Repositories
                     .ToListAsync();
             }
         }
+
+        public async Task<List<Transaction>> GetUnreadTransferInsAsync(int accountId)
+        {
+            using (var context = new AppDbContext())
+            {
+                return await context.Transactions
+                    .Include(t => t.Category)
+                    .Where(t => t.AccountId == accountId
+                             && t.Category.Title == "Transfer In"
+                             && t.IsRead == false)
+                    .OrderByDescending(t => t.Date)
+                    .ToListAsync();
+            }
+        }
+        public async Task MarkTransfersAsReadAsync(int accountId)
+        {
+            using (var context = new AppDbContext())
+            {
+                var unread = await context.Transactions
+                    .Where(t => t.AccountId == accountId
+                             && t.IsRead == false)
+                    .ToListAsync();
+
+                foreach (var t in unread)
+                    t.IsRead = true;
+
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

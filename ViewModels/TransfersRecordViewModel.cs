@@ -66,44 +66,7 @@ namespace SmartSaving.ViewModels
                 // Handle silently
             }
         }
-        public class TransferDisplayItem
-        {
-            public string Date { get; set; } = string.Empty;
-            public string PersonName { get; set; } = string.Empty;
-            public string Note { get; set; } = string.Empty;
-            public decimal Amount { get; set; }
-
-            public static TransferDisplayItem FromTransaction(Transaction t, bool isSent)
-            {
-                var description = t.Description ?? string.Empty;
-                var separator = isSent ? " → " : " ← ";
-                string name = string.Empty;
-                string note = string.Empty;
-
-                var separatorIndex = description.IndexOf(separator);
-                if (separatorIndex >= 0)
-                {
-                    note = description.Substring(0, separatorIndex).Trim();
-                    name = description.Substring(separatorIndex + separator.Length).Trim();
-                }
-                else
-                {
-                    // Handle old format "Transfer to/from [Name]"
-                    var prefix = isSent ? "Transfer to " : "Transfer from ";
-                    if (description.StartsWith(prefix))
-                        name = description.Substring(prefix.Length).Trim();
-                    else
-                        note = description;
-                }
-
-                return new TransferDisplayItem
-                {
-                    Date = t.Date.ToString("dd/MM/yyyy"),
-                    PersonName = string.IsNullOrEmpty(name) ? "Unknown" : name,
-                    Note = note,
-                    Amount = t.Amount
-                };
-            }
-        }
+        
+        
     }
 }

@@ -33,6 +33,10 @@ namespace SmartSaving.Models
         [Column("description")]
         public string Description { get; set; } = string.Empty;
 
+        [Column("is_read")]
+        public bool IsRead { get; set; } = true;
+
+
         // Navigation properties
         public Account Account { get; set; } = null!;
         public Category Category { get; set; } = null!;

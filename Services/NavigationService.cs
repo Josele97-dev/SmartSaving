@@ -2,6 +2,7 @@ using SmartSaving.Models;
 using SmartSaving.Repositories;
 using SmartSaving.ViewModels;
 using SmartSaving.Views;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace SmartSaving.Services
@@ -41,7 +42,7 @@ namespace SmartSaving.Services
 
         public void OpenMainWindow(User user)
         {
-            var vm = new MainViewModel(this, _transactionService, _accountRepository, _categoryRepository, user);
+            var vm = new MainViewModel(this, _transactionService, _accountRepository, _categoryRepository, _transactionRepository, user);
             var window = new MainWindow(vm);
             window.Show();
         }
@@ -84,6 +85,18 @@ namespace SmartSaving.Services
         {
             var vm = new TransfersRecordViewModel(_transactionService, user);
             var window = new TransfersRecordWindow(vm);
+            window.Show();
+        }
+        public  async Task  ShowTransferNotificationIfNeeded(User user)
+        {
+            var defaultAccount = user.Accounts?.FirstOrDefault();
+            if (defaultAccount == null) return;
+
+            var unread = await _transactionRepository.GetUnreadTransferInsAsync(defaultAccount.Id);
+            if (unread.Count == 0) return;
+
+            var vm = new TransferNotificationViewModel(_transactionRepository, defaultAccount.Id, unread);
+            var window = new TransferNotificationWindow(vm);
             window.Show();
         }
     }

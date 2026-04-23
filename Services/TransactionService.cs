@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using SmartSaving.Events;
 using SmartSaving.Models;
 using SmartSaving.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SmartSaving.Services
 {
@@ -147,6 +148,7 @@ namespace SmartSaving.Services
                 CategoryId = transferInCategory.Id,
                 Amount = amount,
                 Date = DateTime.UtcNow,
+                IsRead = false,
                 Description = string.IsNullOrWhiteSpace(description)
                 ? $"Transfer from {sender.FirstName} {sender.LastName}"
                 : $"{description} ← {sender.FirstName} {sender.LastName}"
@@ -154,6 +156,8 @@ namespace SmartSaving.Services
 
             await _transactionRepository.AddAsync(outTransaction);
             await _transactionRepository.AddAsync(inTransaction);
+
+           
         }
 
 

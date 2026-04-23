@@ -13,6 +13,7 @@ namespace SmartSaving.Services
         void OpenMonthlyTransactionsWindow(User user);
         void OpenTransferWindow(User user);
         void OpenTransfersRecordWindow(User user);
+        Task  ShowTransferNotificationIfNeeded(User user);
     }
 }
 

@@ -1,4 +1,4 @@
-using SmartSaving.Commands;
+﻿using SmartSaving.Commands;
 using SmartSaving.Models;
 using SmartSaving.Repositories;
 using SmartSaving.Services;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using SmartSaving.Events;
@@ -18,6 +19,8 @@ namespace SmartSaving.ViewModels
         private readonly ITransactionService _transactionService;
         private readonly IAccountRepository _accountRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ITransactionRepository _transactionRepository;
+        private Timer? _pollingTimer;
         private readonly User _currentUser;
 
         private decimal _balance;
@@ -101,6 +104,14 @@ namespace SmartSaving.ViewModels
             get => _categoryProgress;
             set { _categoryProgress = value; OnPropertyChanged(); }
         }
+        private string _transferBanner = string.Empty;
+        public string TransferBanner
+        {
+            get => _transferBanner;
+            set { _transferBanner = value; OnPropertyChanged(); OnPropertyChanged(nameof(ShowTransferBanner)); }
+        }
+
+        public bool ShowTransferBanner => !string.IsNullOrEmpty(_transferBanner);
         public string WelcomeMessage
         {
             get
@@ -128,12 +139,13 @@ namespace SmartSaving.ViewModels
         public ICommand TransferCommand { get; }
         public ICommand TransfersRecordCommand { get; }
 
-        public MainViewModel(INavigationService navigationService, ITransactionService transactionService, IAccountRepository accountRepository, ICategoryRepository categoryRepository, User user)
+        public MainViewModel(INavigationService navigationService, ITransactionService transactionService, IAccountRepository accountRepository, ICategoryRepository categoryRepository, ITransactionRepository transactionRepository, User user)
         {
             _navigationService = navigationService;
             _transactionService = transactionService;
             _accountRepository = accountRepository;
             _categoryRepository = categoryRepository; // add this
+            _transactionRepository = transactionRepository;
             _currentUser = user;
 
             OpenTransactionCommand = new RelayCommand(OpenTransaction);
@@ -152,6 +164,9 @@ namespace SmartSaving.ViewModels
 
             EventAggregator.TransactionChanged += async () => await LoadDataAsync();
             EventAggregator.CategoryChanged += async () => await LoadDataAsync();
+            _pollingTimer = new Timer(async _ => await CheckForIncomingTransfersAsync(),
+             null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+
 
             // Fire-and-forget initial data load (safe here because errors are caught internally)
             _ = LoadDataAsync();
@@ -228,13 +243,50 @@ namespace SmartSaving.ViewModels
                 // Silently handle
             }
         }
+        private async Task CheckForIncomingTransfersAsync()
+        {
+            try
+            {
+                var defaultAccount = await _accountRepository.GetDefaultByUserIdAsync(_currentUser.Id);
+                if (defaultAccount == null) return;
 
+                var unread = await _transactionRepository.GetUnreadTransferInsAsync(defaultAccount.Id);
+                if (unread.Count == 0) return;
+
+                await _transactionRepository.MarkTransfersAsReadAsync(defaultAccount.Id);
+
+                var latest = unread.First();
+                var description = latest.Description ?? string.Empty;
+                var senderName = description.Contains(" \u2190 ")
+                    ? description.Substring(description.IndexOf(" \u2190 ") + 3).Trim()
+                    : "someone";
+
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    TransferBanner = $"💸 €{latest.Amount:N2} received from {senderName}!";
+                });
+
+                await Task.Delay(3000);
+
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    TransferBanner = string.Empty;
+                });
+
+                await LoadDataAsync();
+            }
+            catch (Exception)
+            {
+                // Handle silently
+            }
+        }
         private void OpenTransaction()
         {
             _navigationService.OpenTransactionWindow(_currentUser);
         }
         private void Logout()  // add here
         {
+            _pollingTimer?.Dispose();
 
             EventAggregator.TransactionChanged -= async () => await LoadDataAsync();
             EventAggregator.CategoryChanged -= async () => await LoadDataAsync();
@@ -282,15 +334,15 @@ namespace SmartSaving.ViewModels
         {
             _navigationService.OpenTransfersRecordWindow(_currentUser);
         }
+        
     }
-
 
     public class CategoryBudgetProgress
     {
         public string CategoryName { get; set; } = string.Empty;
         public decimal Spent { get; set; }
         public decimal Limit { get; set; }
-        public string Summary => $"{CategoryName}: �{Spent:N2} / �{Limit:N2}";
+        public string Summary => $"{CategoryName}: €{Spent:N2} / €{Limit:N2}";
         public double Percentage => Limit > 0 ? (double)(Spent / Limit) * 100 : 0;
         public string ProgressColour => Percentage >= 100 ? "#FFE74C3C"
                                       : Percentage >= 80 ? "#FFF39C12"

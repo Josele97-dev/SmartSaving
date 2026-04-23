@@ -72,6 +72,7 @@ namespace SmartSaving.ViewModels
                 }
 
                 _navigationService.OpenMainWindow(user);
+                await _navigationService.ShowTransferNotificationIfNeeded(user);
 
                 // Close the current login window
                 CloseCurrentWindow();
