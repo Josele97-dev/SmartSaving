@@ -14,7 +14,7 @@ namespace SmartSaving.Views
 
     public partial class TransferConfirmDialog : Window
     {
-        private readonly TaskCompletionSource<bool> _tcs = new();
+        private TaskCompletionSource<bool> _tcs = new();
 
         public Task<bool> WaitForResultAsync() => _tcs.Task;
 
@@ -38,15 +38,33 @@ namespace SmartSaving.Views
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            ConfirmButton.IsEnabled = false;
-            CancelButton.IsEnabled = false;
-            _tcs.SetResult(true);
+            _tcs.TrySetResult(true);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            _tcs.SetResult(false);
+            _tcs.TrySetResult(false);
             Close();
+        }
+        public void ShowError(string message)
+        {
+            _tcs = new TaskCompletionSource<bool>();
+            ErrorText.Text = message;
+            ErrorText.Visibility = Visibility.Visible;
+            ConfirmButton.IsEnabled = false;
+            ConfirmButton.Visibility = Visibility.Collapsed;
+            this.Topmost = true;
+            this.Activate();
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(3);
+            timer.Tick += (s, args) =>
+            {
+                timer.Stop();
+                _tcs.TrySetResult(false);
+                Close();
+            };
+            timer.Start();
         }
     }
 }

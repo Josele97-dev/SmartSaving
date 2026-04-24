@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Threading.Tasks;
 using SmartSaving.Repositories;
 using SmartSaving.Services;
 using SmartSaving.ViewModels;
@@ -8,9 +9,13 @@ namespace SmartSaving
 {
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            // Show splash screen
+            var splash = new AppSplashScreen();
+            splash.Show();
 
             // 1. Create repositories
             var userRepository = new UserRepository();
@@ -18,17 +23,27 @@ namespace SmartSaving
             var transactionRepository = new TransactionRepository();
             var categoryRepository = new CategoryRepository();
 
-            // 2. Create services (inject repositories)
+            // 2. Create services
             var authService = new AuthService(userRepository, accountRepository, categoryRepository);
             var transactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository);
 
-            // 3. Create navigation service (inject services)
-            var navigationService = new NavigationService(authService, transactionService, categoryRepository, accountRepository, transactionRepository,userRepository);
+            // 3. Ping database in background to warm up Supabase during splash
+            var warmupTask = Task.Run(async () =>
+            {
+                try { await userRepository.GetAllUsersAsync(); }
+                catch { }
+            });
 
-            // 4. Open the login window
+            // 4. Wait for splash duration and warmup simultaneously
+            await Task.WhenAll(warmupTask, Task.Delay(3000));
+
+            // 5. Create navigation service and open login
+            var navigationService = new NavigationService(authService, transactionService, categoryRepository, accountRepository, transactionRepository, userRepository);
             var loginVM = new LoginViewModel(authService, navigationService);
             var loginWindow = new LoginWindow(loginVM);
             loginWindow.Show();
+
+            splash.Close();
         }
     }
 }

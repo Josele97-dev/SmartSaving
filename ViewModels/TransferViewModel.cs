@@ -21,6 +21,7 @@ namespace SmartSaving.ViewModels
 
         public Func<string, decimal, Task<bool>>? RequestConfirmAction { get; set; }
         public Action<string, decimal>? ShowSuccessAction { get; set; }
+        public Action<string>? ShowErrorAction { get; set; }
 
         private ObservableCollection<User> _availableRecipients = new();
         public ObservableCollection<User> AvailableRecipients
@@ -62,6 +63,7 @@ namespace SmartSaving.ViewModels
             set { _errorMessage = value; OnPropertyChanged(); }
         }
         
+
         public ICommand TransferCommand { get; }
 
         public TransferViewModel(ITransactionService transactionService, IUserRepository userRepository, User currentUser)
@@ -138,15 +140,15 @@ namespace SmartSaving.ViewModels
             }
             catch (InvalidOperationException ex)
             {
-                ErrorMessage = ex.Message;
+                ShowErrorAction?.Invoke(ex.Message);
             }
             catch (ArgumentException ex)
             {
-                ErrorMessage = ex.Message;
+                ShowErrorAction?.Invoke(ex.Message);
             }
             catch (Exception)
             {
-                ErrorMessage = "An unexpected error occurred during the transfer.";
+                ShowErrorAction?.Invoke("An unexpected error occurred during the transfer.");
             }
         }
     }

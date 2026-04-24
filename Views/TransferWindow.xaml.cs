@@ -46,6 +46,19 @@ namespace SmartSaving.Views
                     }
                 }
             };
+            viewModel.ShowErrorAction = (message) =>
+            {
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window is TransferConfirmDialog dialog)
+                    {
+                        dialog.ShowError(message);
+                        dialog.Activate();
+                        break;
+                    }
+                }
+                this.Show();
+            };
         }
     }
 }

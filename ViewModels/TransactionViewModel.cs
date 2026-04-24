@@ -90,10 +90,11 @@ namespace SmartSaving.ViewModels
        
 
         private string _errorMessage = string.Empty;
+        public bool HasError => !string.IsNullOrEmpty(_errorMessage);
         public string ErrorMessage
         {
             get => _errorMessage;
-            set { _errorMessage = value; OnPropertyChanged(); }
+            set { _errorMessage = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasError)); }
         }
 
         private string _successMessage = string.Empty;

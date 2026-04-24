@@ -25,7 +25,16 @@
                            HorizontalAlignment="Center"
                            TextAlignment="Center"
                            Margin="0,0,0,20"/>
-
+                
+                <TextBlock x:Name="ErrorText"
+                   Foreground="#FFE74C3C"
+                   FontSize="12"
+                   TextWrapping="Wrap"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center"
+                   Margin="0,0,0,10"
+                   Visibility="Collapsed"/>
+                
                 <Button x:Name="ConfirmButton"
                         Content="Confirm"
                         Height="35"

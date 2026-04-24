@@ -49,7 +49,26 @@ namespace SmartSaving.Services
             var account = await GetDefaultAccountAsync(userId);
             transaction.AccountId = account.Id;
 
-           
+            if (transaction.CategoryId != 0)
+            {
+                var category = await _categoryRepository.GetByIdAsync(transaction.CategoryId);
+                if (category?.Type == TransactionType.Expense)
+                {
+                    var existingTransactions = await _transactionRepository.GetByAccountIdAsync(account.Id);
+                    var currentBalance = existingTransactions
+                        .Where(t => t.Type == TransactionType.Income)
+                        .Sum(t => t.Amount)
+                        - existingTransactions
+                        .Where(t => t.Type == TransactionType.Expense)
+                        .Sum(t => t.Amount);
+
+                    if (transaction.Amount > currentBalance)
+                        throw new InvalidOperationException(
+                            $"Insufficient balance. Your current balance is €{currentBalance:N2}.");
+                }
+            }
+
+
 
             return await _transactionRepository.AddAsync(transaction);
         }
