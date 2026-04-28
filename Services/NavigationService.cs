@@ -3,6 +3,7 @@ using SmartSaving.Repositories;
 using SmartSaving.ViewModels;
 using SmartSaving.Views;
 using System.Security.Cryptography.X509Certificates;
+using System.Windows;
 
 
 namespace SmartSaving.Services
@@ -38,6 +39,15 @@ namespace SmartSaving.Services
             var vm = new RegisterViewModel(_authService, this);
             var window = new RegisterWindow(vm);
             window.Show();
+
+            foreach (Window w in Application.Current.Windows)
+            {
+                if (w is LoginWindow)
+                {
+                    w.Close();
+                    break;
+                }
+            }
         }
 
         public void OpenMainWindow(User user)
@@ -97,7 +107,9 @@ namespace SmartSaving.Services
 
             var vm = new TransferNotificationViewModel(_transactionRepository, defaultAccount.Id, unread);
             var window = new TransferNotificationWindow(vm);
+            window.Topmost = true;
             window.Show();
+            window.Activate();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SmartSaving.Views.RegisterWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Crear Cuenta" Height="560" Width="400"
+        Title="Crear Cuenta" Height="650" Width="400"
         WindowStartupLocation="CenterScreen"
         Background="#FF2C3E50"
         ResizeMode="NoResize">
@@ -19,7 +19,14 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,20"/>
 
-					<!-- Error Message -->
+                    <TextBlock Text="&#xe71d;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="40"
+                                   Foreground="#FF1ABC9C"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,10"/>
+
+                    <!-- Error Message -->
 					<TextBlock Text="{Binding ErrorMessage}"
                                Foreground="#FFE74C3C"
                                FontSize="12"
@@ -72,8 +79,9 @@
 
 					<!-- Back to Login link -->
 					<TextBlock Text="Back to Login"
-                               Foreground="#FF3498DB"
+                               Foreground="White"
                                HorizontalAlignment="Center"
+                               FontWeight="Bold"
                                Margin="0,15,0,0"
                                Cursor="Hand">
 						<TextBlock.InputBindings>
