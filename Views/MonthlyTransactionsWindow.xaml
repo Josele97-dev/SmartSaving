@@ -20,11 +20,20 @@
                            Margin="0,0,0,20"/>
 
                 <!-- Income Section -->
-                <TextBlock Text="Income"
-                           Foreground="#FF27AE60"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
+
+                    <TextBlock Text="Income"
+                    Foreground="White"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    VerticalAlignment="Center"/>
+                    <TextBlock Text="&#xe74c;"
+                 FontFamily="Segoe MDL2 Assets"
+                 FontSize="16"
+                 Foreground="Green"
+                 VerticalAlignment="Center"
+                 Margin="5,0,0,0"  />
+                </StackPanel>
 
                 <Border Background="#1A3A2A" CornerRadius="8" Padding="5" MinHeight="80" Margin="0,0,0,20">
                     <Grid>
@@ -72,11 +81,20 @@
                 </Border>
 
                 <!-- Expenses Section -->
-                <TextBlock Text="Expenses"
-                           Foreground="#FFE74C3C"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
+
+                    <TextBlock Text="Expenses"
+                Foreground="White"
+                FontSize="16"
+                FontWeight="Bold"
+                VerticalAlignment="Center"/>
+                    <TextBlock Text="&#xe8d0;"
+                 FontFamily="Segoe MDL2 Assets"
+                 FontSize="16"
+                 Foreground="Red"
+                 VerticalAlignment="Center"
+                 Margin="5,0,0,0"  />
+                </StackPanel>
 
                 <Border Background="#3A1A1A" CornerRadius="8" Padding="5" MinHeight="80" Margin="0,0,0,20">
                     <Grid>

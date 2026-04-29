@@ -10,9 +10,24 @@ namespace SmartSaving.Views
         {
             InitializeComponent();
             DataContext = viewModel;
-            viewModel.CloseAction = () => Hide(); 
-            viewModel.ReopenAction = () => Show();
+
+            viewModel.CloseAction = () =>
+            {
+                if (IsLoaded) Hide();
+            };
+
+            viewModel.ReopenAction = () =>
+            {
+                if (IsLoaded) Show();
+            };
+
+            Closed += (s, e) =>
+            {
+                viewModel.CloseAction = null;
+                viewModel.ReopenAction = null;
+            };
         }
+
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (DataContext is SearchViewModel vm)

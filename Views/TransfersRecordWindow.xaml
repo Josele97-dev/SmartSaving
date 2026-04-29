@@ -19,11 +19,20 @@
                            Margin="0,0,0,20"/>
 
                 <!-- Sent Section -->
+                <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
+
                 <TextBlock Text="Sent"
-                           Foreground="#FFE74C3C"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0,0,0,10"/>
+               Foreground="White"
+               FontSize="16"
+               FontWeight="Bold"
+               VerticalAlignment="Center"/>
+                    <TextBlock Text="&#xE8A7;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="16"
+                    Foreground="#FFE74C3C"
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0"  />
+                </StackPanel>
 
                 <Border Background="#3A1A1A" CornerRadius="8" Padding="5" MinHeight="80" Margin="0,0,0,20">
                     <Grid>
@@ -72,11 +81,19 @@
                 </Border>
 
                 <!-- Received Section -->
-                <TextBlock Text="Received"
-                           Foreground="#FF27AE60"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                 <TextBlock Text="Received"
+               Foreground="White"
+               FontSize="16"
+               FontWeight="Bold"
+               VerticalAlignment="Center"/>
+                    <TextBlock Text="&#xE8A8;"
+                FontFamily="Segoe MDL2 Assets"
+                FontSize="16"
+                Foreground="#FF27AE60"
+                VerticalAlignment="Center"
+                Margin="5,0,0,0"/>
+                </StackPanel>
 
                 <Border Background="#1A3A2A" CornerRadius="8" Padding="5" MinHeight="80" Margin="0,0,0,20">
                     <Grid>

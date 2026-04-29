@@ -14,9 +14,16 @@
                 <TextBlock Text="Confirm Transfer"
                            FontSize="18"
                            FontWeight="Bold"
-                           Foreground="#FF1ABC9C"
+                           Foreground="White"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,15"/>
+                
+                <TextBlock Text="&#xe91c;"
+               FontFamily="Segoe MDL2 Assets"
+               FontSize="25"
+               Foreground="#E23247"
+               HorizontalAlignment="Center"
+               Margin="0,0,0,10"/>
 
                 <TextBlock x:Name="MessageText"
                            Foreground="White"

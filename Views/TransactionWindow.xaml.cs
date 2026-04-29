@@ -23,7 +23,11 @@ namespace SmartSaving.Views
         {
             InitializeComponent();
             DataContext = viewModel;
-            viewModel.CloseAction = () => Close();
+            viewModel.CloseAction = () =>
+            {
+                if (IsLoaded)
+                    Close();
+            };
             Closed += (s, e) => EventAggregator.PublishTransactionWindowClosed();
         }
     }

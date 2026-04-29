@@ -17,6 +17,12 @@
                            Foreground="White"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,20"/>
+                <TextBlock Text="&#xe71e;"
+               FontFamily="Segoe MDL2 Assets"
+               FontSize="30"
+               Foreground="#75c350"
+               HorizontalAlignment="Center"
+               Margin="0,0,0,10"/>
 
                 <!-- Search Form -->
                 <Border Background="#334155" CornerRadius="12" Padding="20" Margin="0,0,0,15">

@@ -17,6 +17,12 @@
                            Foreground="White"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,20"/>
+                <TextBlock Text="&#xe8d1;"
+               FontFamily="Segoe MDL2 Assets"
+               FontSize="30"
+               Foreground="Orange"
+               HorizontalAlignment="Center"
+               Margin="0,0,0,10"/>
 
                 <!-- Error Message -->
                 <TextBlock Text="{Binding ErrorMessage}"

@@ -33,16 +33,27 @@
                             </Setter>
                         </Style>
                     </Button.Style>
-                    <Border Background="#FF34495E" CornerRadius="10" Padding="20" Margin="0,0,0,15">
+                    <Border Background="#8177A6" CornerRadius="10" Padding="20" Margin="0,0,0,15"
+                        BorderBrush="White" BorderThickness="3">
                         <StackPanel>
-                            <TextBlock Text="Current Balance"
-                       Foreground="#FFBDC3C7"
-                       FontSize="14"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <TextBlock Text="&#xE7BF;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="16"
+                                   Foreground="Yellow"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0"/>
+                                <TextBlock Text="Current Balance"
+                               Foreground="White"
+                               FontSize="14"
+                                FontWeight="Bold"
+                               VerticalAlignment="Center"/>
+                            </StackPanel>
                             <TextBlock Text="{Binding Balance, StringFormat='€{0:N2}'}"
-                       Foreground="White"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Margin="0,5,0,0"/>
+                           Foreground="White"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Margin="0,5,0,0"/>
                         </StackPanel>
                     </Border>
                 </Button>
@@ -85,14 +96,27 @@
                                 </Setter>
                             </Style>
                         </Button.Style>
-                        <Border Background="#FF27AE60" CornerRadius="8" Padding="15">
+                        <Border Background="White" CornerRadius="8" Padding="15"
+                                BorderBrush="Black" BorderThickness="3">
                             <StackPanel>
-                                <TextBlock Text="Income" Foreground="White" FontSize="12"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <TextBlock Text="&#xE78B;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="25"
+                                   Foreground="#FF27AE60"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0"/>
+                                    <TextBlock Text="Income"
+                                   Foreground="Black"
+                                   FontWeight="Bold"
+                                   FontSize="12"
+                                   VerticalAlignment="Center"/>
+                                </StackPanel>
                                 <TextBlock Text="{Binding TotalIncome, StringFormat='€{0:N2}'}"
-                       Foreground="White"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       Margin="0,5,0,0"/>
+                               Foreground="Green"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Margin="0,5,0,0"/>
                             </StackPanel>
                         </Border>
                     </Button>
@@ -114,14 +138,27 @@
                                 </Setter>
                             </Style>
                         </Button.Style>
-                        <Border Background="#FFE74C3C" CornerRadius="8" Padding="15">
+                        <Border Background="White" CornerRadius="8" Padding="15"
+                            BorderBrush="Black" BorderThickness="3">
                             <StackPanel>
-                                <TextBlock Text="Expenses" Foreground="White" FontSize="12"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <TextBlock Text="&#xE74D;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="20"
+                                   Foreground="#FFE74C3C"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0"/>
+                                    <TextBlock Text="Expenses"
+                               Foreground="Black"
+                               FontWeight="Bold"
+                               FontSize="12"
+                               VerticalAlignment="Center"/>
+                                </StackPanel>
                                 <TextBlock Text="{Binding TotalExpenses, StringFormat='€{0:N2}'}"
-                       Foreground="White"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       Margin="0,5,0,0"/>
+                               Foreground="#FFE74C3C"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Margin="0,5,0,0"/>
                             </StackPanel>
                         </Border>
                     </Button>
@@ -129,18 +166,68 @@
                 <Button Content="Transfer Funds"
                 Height="35"
                 Margin="0,0,0,15"
-                Background="#FF1ABC9C"
                 Foreground="White"
                 FontWeight="Bold"
-                Command="{Binding TransferCommand}"/>
+                Cursor="Hand"
+                Command="{Binding TransferCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#8177A6"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderBrush="#FF27AE60"
+                                BorderThickness="3"
+                                Padding="5">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FFE8E8E8"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
                 <Button Content="Transfer Record"
-                Height="25"
-                Margin="0,5,0,0"
-                Background="#FF2980B9"
+                Height="35"
+                Margin="0,5,0,10"
                 Foreground="White"
                 FontWeight="Bold"
-                Command="{Binding TransfersRecordCommand}"/>
+                Cursor="Hand"
+                Command="{Binding TransfersRecordCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#8177A6"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderBrush="#FF3498DB"
+                                BorderThickness="3"
+                                Padding="5">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FFE8E8E8"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button> 
 
                 <TextBlock Text="This Month"
            Foreground="White"
@@ -148,59 +235,62 @@
            FontWeight="Bold"
            Margin="0,0,0,10"/>
 
-				<Border Background="#FF34495E" CornerRadius="8" Padding="15" Margin="0,0,0,15">
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition Width="*"/>
-						</Grid.ColumnDefinitions>
+                <Border Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,15"
+                     BorderBrush="Black" BorderThickness="3">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-						<!-- Monthly Income -->
-						<StackPanel Grid.Column="0" HorizontalAlignment="Center">
-							<TextBlock Text="Income"
-									   Foreground="#FFBDC3C7"
-									   FontSize="12"
-									   HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding MonthlyIncome, StringFormat='€{0:N2}'}"
-									   Foreground="#FF27AE60"
-									   FontSize="15"
-									   FontWeight="Bold"
-									   HorizontalAlignment="Center"
-									   Margin="0,4,0,0"/>
-						</StackPanel>
+                        <!-- Monthly Income -->
+                        <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                            <TextBlock Text="Income"
+                       Foreground="Black"
+                       FontWeight="Bold"
+                       FontSize="12"
+                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding MonthlyIncome, StringFormat='€{0:N2}'}"
+                       Foreground="#FF27AE60"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,4,0,0"/>
+                        </StackPanel>
 
-						<!-- Monthly Expenses -->
-						<StackPanel Grid.Column="1" HorizontalAlignment="Center">
-							<TextBlock Text="Expenses"
-									   Foreground="#FFBDC3C7"
-									   FontSize="12"
-									   HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding MonthlyExpenses, StringFormat='€{0:N2}'}"
-									   Foreground="#FFE74C3C"
-									   FontSize="15"
-									   FontWeight="Bold"
-									   HorizontalAlignment="Center"
-									   Margin="0,4,0,0"/>
-						</StackPanel>
+                        <!-- Monthly Expenses -->
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                            <TextBlock Text="Expenses"
+                       Foreground="Black"
+                       FontWeight="Bold"
+                       FontSize="12"
+                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding MonthlyExpenses, StringFormat='€{0:N2}'}"
+                       Foreground="#FFE74C3C"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,4,0,0"/>
+                        </StackPanel>
 
-						<!-- Monthly Net -->
-						<StackPanel Grid.Column="2" HorizontalAlignment="Center">
-							<TextBlock Text="Net"
-									   Foreground="#FFBDC3C7"
-									   FontSize="12"
-									   HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding MonthlyNet, StringFormat='€{0:N2}'}"
-									   Foreground="{Binding MonthlyNetColour}"
-									   FontSize="15"
-									   FontWeight="Bold"
-									   HorizontalAlignment="Center"
-									   Margin="0,4,0,0"/>
-						</StackPanel>
+                        <!-- Monthly Net -->
+                        <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                            <TextBlock Text="Net"
+                       Foreground="Black"
+                       FontSize="12"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding MonthlyNet, StringFormat='€{0:N2}'}"
+                       Foreground="{Binding MonthlyNetColour}"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-					</Grid>
-				</Border>
-				
                 <TextBlock Text="Budget Progress"
            Foreground="White"
            FontSize="16"
@@ -262,24 +352,74 @@
 						</Border>
 					</StackPanel>
 
-					<Button Grid.Column="1"
-							Content="View All"
-							Height="28"
-							Width="70"
-							Background="#FF8E44AD"
-							Foreground="White"
-							FontWeight="Bold"
-							Command="{Binding ViewMonthlyCommand}"/>
+                    <Button Grid.Column="1"
+                        Content="View All"
+                        Height="28"
+                        Width="70"
+                        Foreground="#FF8E44AD"
+                        FontWeight="Bold"
+                        Cursor="Hand"
+                        Command="{Binding ViewMonthlyCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderBrush="Black"
+                                BorderThickness="2"
+                                Padding="5">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFE8E8E8"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
-					<Button Grid.Column="3"
-							Content="Search"
-							Height="28"
-							Width="70"
-							Background="#FF3498DB"
-							Foreground="White"
-							FontWeight="Bold"
-							Command="{Binding SearchCommand}"/>
-				</Grid>
+                    <Button Grid.Column="3"
+                        Content="Search"
+                        Height="28"
+                        Width="70"
+                        Foreground="#FF3498DB"
+                        FontWeight="Bold"
+                        Cursor="Hand"
+                        Command="{Binding SearchCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                            CornerRadius="8"
+                                            BorderBrush="Black"
+                                            BorderThickness="2"
+                                            Padding="5">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFE8E8E8"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
 
 				<Border Background="#FF34495E" CornerRadius="8" Padding="5" MinHeight="120">
 					<Grid>
@@ -329,53 +469,153 @@
 					</Grid>
 				</Border>
 				<!-- Buttons -->
-				<Grid Margin="0,15,0,0">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="10"/>
-						<ColumnDefinition Width="Auto"/>
-					</Grid.ColumnDefinitions>
+                <Grid Margin="0,15,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0">
                         <Button Content="New Transaction"
-                            Height="35"
-                            Background="#FF1ABC9C"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            Command="{Binding OpenTransactionCommand}" />
+                Height="35"
+                Foreground="Green"
+                FontWeight="Bold"
+                Cursor="Hand"
+                Command="{Binding OpenTransactionCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="White"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="8"
+                                        BorderBrush="Black"
+                                        BorderThickness="3"
+                                        Padding="5">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFE8E8E8"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </StackPanel>
+
                     <StackPanel Grid.Column="2" HorizontalAlignment="Right">
                         <Button Content="Refresh"
                         Height="35"
                         Width="80"
-                        Background="#FF3498DB"
-                        Foreground="White"
+                        Foreground="#86E0F9"
                         FontWeight="Bold"
-                        Command="{Binding RefreshCommand}" />
+                        Cursor="Hand"
+                         Command="{Binding RefreshCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#FF34495E"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="8"
+                                        BorderBrush="White"
+                                        BorderThickness="3"
+                                        Padding="5">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFE8E8E8"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                         <TextBlock Text="{Binding LastRefreshedText}"
-                           Foreground="#FFBDC3C7"
-                           FontSize="10"
-                           HorizontalAlignment="Center"
-                           Margin="0,4,0,0"/>
+                   Foreground="#FFBDC3C7"
+                   FontSize="10"
+                   HorizontalAlignment="Center"
+                   Margin="0,4,0,0"/>
                     </StackPanel>
                 </Grid>
-                
-                <Button Grid.Column="4"
-                Content="Manage Categories"
-                Height="35"
-                Margin="0,10,0,0"
-                Background="#FF8E44AD"
-                Foreground="White"
-                 FontWeight="Bold"
-                Command="{Binding ManageCategoriesCommand}"/>  
-                
+
+                <Button Content="Manage Categories"
+                    Height="35"
+                    Margin="0,10,0,0"
+                    Foreground="#FF8E44AD"
+                    FontWeight="Bold"
+                    Cursor="Hand"
+        Command="{Binding ManageCategoriesCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderBrush="Black"
+                                BorderThickness="3"
+                                Padding="5">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FFE8E8E8"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
                 <Button Content="Logout"
-                Height="20"
-                 Margin="0,10,0,0"
-                 Background="#FFE74C3C"
-                 Foreground="White"
-                 FontWeight="Bold"
-                 Command="{Binding LogoutCommand}" />
+        Height="35"
+        Margin="0,10,0,0"
+        Foreground="#FFE74C3C"
+        FontWeight="Bold"
+        Cursor="Hand"
+        Command="{Binding LogoutCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderBrush="Black"
+                                BorderThickness="3"
+                                Padding="5">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FFE8E8E8"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
 		</ScrollViewer>
 	</Grid>
