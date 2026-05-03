@@ -4,7 +4,8 @@
         Title="Budget Warning" Height="380" Width="400"
         WindowStartupLocation="CenterScreen"
         Background="#1E293B"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Icon="/Assets/Icono.ico">
 
     <Grid Margin="30">
         <StackPanel>

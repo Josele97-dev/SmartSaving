@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartSaving.Views"
         mc:Ignorable="d"
-        Title="NewTransfers" Height="450" Width="600">
+        Title="NewTransfers" Height="450" Width="600"
+        Icon="/Assets/Icono.ico">
+    
     <Grid>
         <StackPanel Background="#FF2A4A5E">
 
