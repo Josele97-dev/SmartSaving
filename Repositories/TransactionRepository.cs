@@ -133,10 +133,16 @@ namespace SmartSaving.Repositories
                     query = query.Where(t => t.Category.Type == type.Value);
 
                 if (from.HasValue)
-                    query = query.Where(t => t.Date >= from.Value);
+                {
+                    var fromUtc = DateTime.SpecifyKind(from.Value, DateTimeKind.Utc);
+                    query = query.Where(t => t.Date >= fromUtc);
+                }
 
                 if (to.HasValue)
-                    query = query.Where(t => t.Date <= to.Value);
+                {
+                    var toUtc = DateTime.SpecifyKind(to.Value.Date.AddDays(1).AddTicks(-1), DateTimeKind.Utc);
+                    query = query.Where(t => t.Date <= toUtc);
+                }
 
                 return await query
                     .OrderByDescending(t => t.Date)

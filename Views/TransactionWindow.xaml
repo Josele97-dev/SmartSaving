@@ -53,7 +53,7 @@
                         <TextBox Margin="0,5,0,10"
                          Padding="5"
                          IsEnabled="{Binding IsNotEditing}"
-                         Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged,TargetNullValue=0, FallbackValue=0}">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="Background" Value="#FFECF0F1"/>
