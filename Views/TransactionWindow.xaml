@@ -4,7 +4,8 @@
         Title="{Binding Title}" Height="650" Width="420"
         WindowStartupLocation="CenterScreen"
         Background="#1E293B"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Icon="/Assets/Icono.ico">
 
 	<Grid Margin="20">
 		<ScrollViewer VerticalScrollBarVisibility="Auto">

@@ -4,7 +4,8 @@
         Title="Dashboard" Height="700" Width="500"
         WindowStartupLocation="CenterScreen"
         Background="#FF2C3E50"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Icon="/Assets/Icono.ico">
 
 	<Grid Margin="20">
 		<ScrollViewer VerticalScrollBarVisibility="Auto">

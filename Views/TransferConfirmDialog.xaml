@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartSaving.Views"
         mc:Ignorable="d"
-        Title="TransferConfirmDialog" Height="450" Width="800">
+        Title="TransferConfirmDialog" Height="450" Width="800"
+        Icon="/Assets/Icono.ico">
+     
     <Grid Margin="0">
         <StackPanel Background="#334155">
             

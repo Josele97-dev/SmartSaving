@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartSaving.Views"
         mc:Ignorable="d"
-        Title="TransfersRecordWindow" Height="650" Width="800">
+        Title="TransfersRecordWindow" Height="650" Width="800"
+        Icon="/Assets/Icono.ico">
+    
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#1E293B">
             <StackPanel Background="#1E293B">
