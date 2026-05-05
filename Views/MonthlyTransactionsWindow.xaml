@@ -12,7 +12,7 @@
                       Background="Transparent">
             <StackPanel Background="Transparent">
 
-                <!-- Month Title -->
+                
                 <TextBlock Text="{Binding MonthTitle}"
                            Foreground="White"
                            FontSize="20"
@@ -20,7 +20,7 @@
                            HorizontalAlignment="Center"
                            Margin="0,0,0,20"/>
 
-                <!-- Income Section -->
+                
                 <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
 
                     <TextBlock Text="Income"
@@ -81,7 +81,7 @@
                     </Grid>
                 </Border>
 
-                <!-- Expenses Section -->
+                
                 <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
 
                     <TextBlock Text="Expenses"

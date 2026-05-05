@@ -12,7 +12,7 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#1E293B">
             <StackPanel Background="#1E293B">
 
-                <!-- Month Title -->
+                
                 <TextBlock Text="{Binding MonthTitle}"
                            Foreground="White"
                            FontSize="20"
@@ -20,7 +20,7 @@
                            HorizontalAlignment="Center"
                            Margin="0,0,0,20"/>
 
-                <!-- Sent Section -->
+                
                 <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
 
                 <TextBlock Text="Sent"
@@ -82,7 +82,7 @@
                     </Grid>
                 </Border>
 
-                <!-- Received Section -->
+                
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                  <TextBlock Text="Received"
                Foreground="White"

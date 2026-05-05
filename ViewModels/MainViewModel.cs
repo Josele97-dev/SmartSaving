@@ -158,7 +158,7 @@ namespace SmartSaving.ViewModels
             TransferCommand = new RelayCommand(OpenTransfer);
             TransfersRecordCommand = new RelayCommand(OpenTransfersRecord);
 
-            // Load balance from the user's default account
+            
             var defaultAccount = user.Accounts?.FirstOrDefault();
             Balance = defaultAccount?.CurrentBalance ?? 0;
 
@@ -168,7 +168,7 @@ namespace SmartSaving.ViewModels
              null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
 
 
-            // Fire-and-forget initial data load (safe here because errors are caught internally)
+            
             _ = LoadDataAsync();
         }
 
@@ -176,7 +176,7 @@ namespace SmartSaving.ViewModels
         {
             try
             {
-                // Re-fetch account from database for fresh balance
+                
                 var freshAccount = await _accountRepository.GetDefaultByUserIdAsync(_currentUser.Id);
                 if (freshAccount != null)
                     Balance = freshAccount.CurrentBalance;
@@ -210,7 +210,7 @@ namespace SmartSaving.ViewModels
                 MonthlyNet = MonthlyIncome - MonthlyExpenses;
                 MonthlyTransactionCount = thisMonth.Count();
 
-                // Load category budget progress
+                
                 if (freshAccount != null)
                 {
                     var categories = await _categoryRepository.GetByAccountIdAsync(freshAccount.Id);
@@ -235,12 +235,12 @@ namespace SmartSaving.ViewModels
                     CategoryProgress = progressList;
                 }
 
-                // Update last refreshed time
+                
                 LastRefreshed = DateTime.Now;
             }
             catch (System.Exception)
             {
-                // Silently handle
+                
             }
         }
         private async Task CheckForIncomingTransfersAsync()
@@ -277,14 +277,14 @@ namespace SmartSaving.ViewModels
             }
             catch (Exception)
             {
-                // Handle silently
+                
             }
         }
         private void OpenTransaction()
         {
             _navigationService.OpenTransactionWindow(_currentUser);
         }
-        private void Logout()  // add here
+        private void Logout()  
         {
             _pollingTimer?.Dispose();
 

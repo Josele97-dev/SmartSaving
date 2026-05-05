@@ -16,9 +16,9 @@ namespace SmartSaving.Models
             string name = string.Empty;
             string note = string.Empty;
 
-            // Try → for sent, ← for received
-            var sentSeparator = " \u2192 "; // →
-            var receivedSeparator = " \u2190 "; // ←
+            
+            var sentSeparator = " \u2192 "; 
+            var receivedSeparator = " \u2190 "; 
 
             var separator = isSent ? sentSeparator : receivedSeparator;
             var separatorIndex = description.IndexOf(separator, System.StringComparison.Ordinal);

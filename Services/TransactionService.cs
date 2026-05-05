@@ -119,7 +119,7 @@ namespace SmartSaving.Services
                 throw new InvalidOperationException("Insufficient balance to complete this transfer.");
            
             
-            // Get or create Transfer Out category for sender
+            
             var senderCategories = await _categoryRepository.GetAllByAccountIdAsync(senderAccount.Id);
             var transferOutCategory = senderCategories.FirstOrDefault(c => c.Title == "Transfer Out");
             if (transferOutCategory == null)
@@ -133,7 +133,7 @@ namespace SmartSaving.Services
                 await _categoryRepository.AddAsync(transferOutCategory);
             }
 
-            // Get or create Transfer In category for recipient
+            
             var recipientCategories = await _categoryRepository.GetAllByAccountIdAsync(recipientAccount.Id);
             var transferInCategory = recipientCategories.FirstOrDefault(c => c.Title == "Transfer In");
             if (transferInCategory == null)
@@ -147,7 +147,7 @@ namespace SmartSaving.Services
                 await _categoryRepository.AddAsync(transferInCategory);
             }
 
-            // Create expense transaction on sender's account
+            
             var outTransaction = new Transaction
             {
                 AccountId = senderAccount.Id,
@@ -160,7 +160,7 @@ namespace SmartSaving.Services
             };
         
 
-            // Create income transaction on recipient's account
+            
             var inTransaction = new Transaction
             {
                 AccountId = recipientAccount.Id,

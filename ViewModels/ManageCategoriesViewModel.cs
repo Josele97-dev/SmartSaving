@@ -58,7 +58,7 @@ namespace SmartSaving.ViewModels
                 .Where(c => c.Type == TransactionType.Expense)
                 .ToList();
 
-            // Also load expense categories without a limit set
+            
             var allCategories = await _categoryRepository.GetAllByAccountIdAsync(defaultAccount.Id);
             var allExpense = allCategories
                 .Where(c => c.Type == TransactionType.Expense)

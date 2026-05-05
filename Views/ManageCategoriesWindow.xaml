@@ -11,7 +11,7 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
 
-                <!-- Title -->
+                
                 <TextBlock Text="Manage Budget Limits"
                            FontSize="20"
                            FontWeight="Bold"
@@ -25,7 +25,7 @@
                HorizontalAlignment="Center"
                Margin="0,0,0,10"/>
 
-                <!-- Error Message -->
+                
                 <TextBlock Text="{Binding ErrorMessage}"
                            Foreground="#FFE74C3C"
                            FontSize="12"
@@ -35,7 +35,7 @@
                            Visibility="{Binding ErrorMessage, 
                            Converter={StaticResource StringToVisibilityConverter}}"/>
 
-                <!-- Success Message -->
+                
                 <TextBlock Text="{Binding SuccessMessage}"
                            Foreground="#FF27AE60"
                            FontSize="12"
@@ -45,7 +45,7 @@
                            Visibility="{Binding SuccessMessage, 
                            Converter={StaticResource StringToVisibilityConverter}}"/>
 
-                <!-- Categories List -->
+               
                 <Border Background="#334155" CornerRadius="12" Padding="20" Margin="0,0,0,15">
                     <ItemsControl ItemsSource="{Binding ExpenseCategories}">
                         <ItemsControl.ItemTemplate>
@@ -70,7 +70,7 @@
                     </ItemsControl>
                 </Border>
 
-                <!-- Save Button -->
+                
                 <Button Content="Save Changes"
                         Height="35"
                         Background="#FF1ABC9C"

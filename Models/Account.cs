@@ -20,7 +20,7 @@ namespace SmartSaving.Models
         [Column("current_balance")]
         public decimal CurrentBalance { get; set; }
 
-        // Navigation properties
+        
         public User User { get; set; } = null!;
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
         public List<Category> Categories { get; set; } = new List<Category>();

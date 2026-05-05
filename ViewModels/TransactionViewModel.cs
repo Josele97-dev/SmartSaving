@@ -24,7 +24,7 @@ namespace SmartSaving.ViewModels
         private readonly INavigationService _navigationService;
         private bool _isUpdating = false;
 
-        // ---- Form fields ----
+        
 
         private string _description = string.Empty;
         public string Description
@@ -75,7 +75,7 @@ namespace SmartSaving.ViewModels
 
                 if (category != null)
                 {
-                    // Set directly without triggering UpdateFilteredCategories again
+                    
                     _selectedTransactionType = category.Type == TransactionType.Income ? "Income" : "Expense";
                     OnPropertyChanged(nameof(SelectedTransactionType));
                 }
@@ -111,7 +111,7 @@ namespace SmartSaving.ViewModels
             set { _budgetLimit = value; OnPropertyChanged(); }
         }
 
-        // ---- Collections for UI binding ----
+        
 
         public List<string> TransactionTypes { get; } = new List<string> { "Income", "Expense" };
 
@@ -138,7 +138,7 @@ namespace SmartSaving.ViewModels
 
         public bool IsExpenseType => SelectedTransactionType == "Expense";
 
-        // ---- Edit mode support ----
+        
 
         public bool IsEditing => _existingTransaction != null;
         public string Title => IsEditing ? "Edit Transaction" : "New Transaction";
@@ -148,13 +148,13 @@ namespace SmartSaving.ViewModels
         public bool IsEditableTransaction => !IsEditing ||
     (_existingTransaction?.Category?.Type == TransactionType.Expense);
 
-        // ---- Commands ----
+       
 
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        // Constructor for CREATING a new transaction
+        
         public TransactionViewModel(ITransactionService transactionService, User user, ICategoryRepository categoryRepository, INavigationService navigationService)
         {
             _transactionService = transactionService;
@@ -166,20 +166,20 @@ namespace SmartSaving.ViewModels
             DeleteCommand = new AsyncRelayCommand(DeleteAsync);
             RefreshCommand = new AsyncRelayCommand(LoadTransactionsAsync);
 
-            // Load the user's categories from their default account
+            
             _ = LoadCategoriesAsync();
 
-            // Load existing transactions
+            
             _ = LoadTransactionsAsync();
         }
 
-        // Constructor for EDITING an existing transaction
+        
         public TransactionViewModel(ITransactionService transactionService, User user, ICategoryRepository categoryRepository, INavigationService navigationService, Transaction transaction)
     : this(transactionService, user, categoryRepository, navigationService)
         {
             _existingTransaction = transaction;
 
-            // Pre-fill the form with the existing transaction data
+            
             Description = transaction.Description;
             Amount = transaction.Amount;
             Date = transaction.Date;
@@ -238,7 +238,7 @@ namespace SmartSaving.ViewModels
             }
             catch (Exception)
             {
-                // Handle silently or log
+                
             }
         }
 
@@ -281,7 +281,7 @@ namespace SmartSaving.ViewModels
                         CategoryId = CategoryId
                     };
 
-                    // Check budget before saving
+                    
                     var category = Categories.FirstOrDefault(c => c.Id == CategoryId);
                     
 
@@ -330,7 +330,7 @@ namespace SmartSaving.ViewModels
 
                 bool wasEditing = IsEditing;
 
-                // Reset form after saving
+                
                 Description = string.Empty;
                 Amount = 0;
                 Date = DateTime.UtcNow;
@@ -338,7 +338,7 @@ namespace SmartSaving.ViewModels
                 OnPropertyChanged(nameof(Title));
                 OnPropertyChanged(nameof(IsEditing));
 
-                // Reload transaction list
+               
                 await LoadTransactionsAsync();
                 EventAggregator.PublishTransactionChanged();
                 CloseAction?.Invoke();

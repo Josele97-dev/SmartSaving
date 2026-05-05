@@ -82,7 +82,7 @@ namespace SmartSaving.ViewModels
             }
             catch (Exception)
             {
-                // Handle silently
+                
             }
         }
 

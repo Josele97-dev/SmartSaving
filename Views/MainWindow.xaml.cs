@@ -16,7 +16,7 @@ using SmartSaving.ViewModels;
 namespace SmartSaving.Views
 {
 
-    /// Lógica de interacción para MainWindow.xaml
+    
     public partial class MainWindow : Window
     {
         public MainWindow(MainViewModel viewModel)

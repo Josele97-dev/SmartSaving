@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 
 namespace SmartSaving.Views
 {
-    /// Lógica de interacción para TransactionWindow.xaml
+    
     public partial class TransactionWindow : Window
     {
         public TransactionWindow(TransactionViewModel viewModel)

@@ -11,7 +11,7 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
 
-                <!-- Title -->
+                
                 <TextBlock Text="Search Transactions"
                            FontSize="20"
                            FontWeight="Bold"
@@ -25,11 +25,11 @@
                HorizontalAlignment="Center"
                Margin="0,0,0,10"/>
 
-                <!-- Search Form -->
+                
                 <Border Background="#334155" CornerRadius="12" Padding="20" Margin="0,0,0,15">
                     <StackPanel>
 
-                        <!-- Keyword -->
+                        
                         <TextBlock Text="Keyword" Foreground="White" Margin="0,0,0,4"/>
                         <TextBox Background="#FFECF0F1"
                                  Padding="5"
@@ -47,7 +47,7 @@
                              IsChecked="{Binding SearchContains}"/>
                             
                         </StackPanel>
-                        <!-- Transaction Type -->
+                        
                        
                         <TextBlock Text="Transaction Type" Foreground="White" Margin="0,0,0,4"/>
                         <ComboBox Background="#FFECF0F1"
@@ -56,7 +56,7 @@
                                   ItemsSource="{Binding TransactionTypes}"
                                   SelectedItem="{Binding SelectedType}"/>
 
-                        <!-- Category -->
+                       
                         <TextBlock Text="Category" Foreground="White" Margin="0,0,0,4"/>
                         <ComboBox Background="#FFECF0F1"
                           Padding="5"
@@ -71,7 +71,7 @@
                                         </ComboBox.ItemTemplate>    
                         </ComboBox>
 
-                        <!-- Date Range -->
+                        
                         <TextBlock Text="From Date" Foreground="White" Margin="0,0,0,4"/>
                         <DatePicker Background="#FFECF0F1"
                                     Margin="0,0,0,10"
@@ -82,7 +82,7 @@
                                     Margin="0,0,0,15"
                                     SelectedDate="{Binding ToDate}"/>
 
-                        <!-- Search Button -->
+                        
                         <Button Content="Search"
                                 Height="35"
                                 Background="#FF3498DB"
@@ -93,7 +93,7 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Error Message -->
+                
                 <TextBlock Text="{Binding ErrorMessage}"
                            Foreground="#FFE74C3C"
                            FontSize="12"
@@ -103,7 +103,7 @@
                            Visibility="{Binding ErrorMessage,
                            Converter={StaticResource StringToVisibilityConverter}}"/>
 
-                <!-- Results -->
+                
                 <TextBlock Text="Results"
                            Foreground="White"
                            FontSize="16"

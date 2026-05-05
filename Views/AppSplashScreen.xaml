@@ -10,7 +10,7 @@
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 
-            <!-- Rounded logo image -->
+            
             <Border CornerRadius="1000"
             Width="300"
             Height="300"

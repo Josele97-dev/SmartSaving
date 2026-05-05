@@ -30,7 +30,7 @@ namespace SmartSaving.Models
         [Column("last_name")]
         public string LastName { get; set; } = string.Empty;
 
-        // Navigation property
+        
         public List<Account> Accounts { get; set; } = new List<Account>();
     }
 }

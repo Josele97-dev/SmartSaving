@@ -36,7 +36,7 @@ namespace SmartSaving.Views
 
             viewModel.ShowSuccessAction = (recipientName, amount) =>
             {
-                // Find the open confirm dialog and show success in it
+                
                 foreach (Window window in Application.Current.Windows)
                 {
                     if (window is TransferConfirmDialog dialog)

@@ -13,31 +13,31 @@ namespace SmartSaving
         {
             base.OnStartup(e);
 
-            // Show splash screen
+            // 1.Se muestra la Splash Screen
             var splash = new AppSplashScreen();
             splash.Show();
 
-            // 1. Create repositories
+            // 2. Se crean los repositories
             var userRepository = new UserRepository();
             var accountRepository = new AccountRepository();
             var transactionRepository = new TransactionRepository();
             var categoryRepository = new CategoryRepository();
 
-            // 2. Create services
+            // 3. Se crean los services
             var authService = new AuthService(userRepository, accountRepository, categoryRepository);
             var transactionService = new TransactionService(transactionRepository, accountRepository, categoryRepository);
 
-            // 3. Ping database in background to warm up Supabase during splash
+            // 4. Se pingea a Supabase para que vaya arrancando la DB mientras ya ha empezado la splash
             var warmupTask = Task.Run(async () =>
             {
                 try { await userRepository.GetAllUsersAsync(); }
                 catch { }
             });
 
-            // 4. Wait for splash duration and warmup simultaneously
+            // 5. Se espera el timepo determinado para la splash 
             await Task.WhenAll(warmupTask, Task.Delay(3000));
 
-            // 5. Create navigation service and open login
+            // 6. CS crea el servicio de navegacion a la vez que login ejecuta
             var navigationService = new NavigationService(authService, transactionService, categoryRepository, accountRepository, transactionRepository, userRepository);
             var loginVM = new LoginViewModel(authService, navigationService);
             var loginWindow = new LoginWindow(loginVM);

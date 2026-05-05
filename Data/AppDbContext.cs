@@ -14,7 +14,7 @@ namespace SmartSaving.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // TODO: Move this connection string to a config file for production
+            
             string connectionString = "Host=aws-1-eu-west-3.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.flcxpckgssocbshylviz;Password=Admin135xxyyzz531.";
             optionsBuilder.UseNpgsql(connectionString);
         }
@@ -23,10 +23,8 @@ namespace SmartSaving.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Register PostgreSQL enum type
-           
-
-            // Convert TransactionType enum to/from strings
+            
+          
             var transactionTypeConverter = new ValueConverter<TransactionType, string>(
                 v => v == TransactionType.Income ? "income" : "expense",
                 v => v == "income" ? TransactionType.Income : TransactionType.Expense

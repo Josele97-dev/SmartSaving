@@ -9,7 +9,7 @@
 
     <Grid Margin="30">
         <StackPanel>
-            <!-- Warning content -->
+            
             <StackPanel x:Name="WarningContent">
                 <TextBlock Text="⚠ Budget Limit Exceeded"
                    FontSize="18"
@@ -62,7 +62,7 @@
 
             </StackPanel>
 
-            <!-- Success message shown after proceeding -->
+            
             <StackPanel x:Name="SuccessContent" Visibility="Collapsed">
                 <TextBlock Text="⚠ Transaction saved"
                    FontSize="18"

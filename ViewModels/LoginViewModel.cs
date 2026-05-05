@@ -74,7 +74,7 @@ namespace SmartSaving.ViewModels
                 _navigationService.OpenMainWindow(user);
                 await _navigationService.ShowTransferNotificationIfNeeded(user);
 
-                // Close the current login window
+                
                 CloseCurrentWindow();
             }
             catch (System.Exception ex)
@@ -90,7 +90,7 @@ namespace SmartSaving.ViewModels
 
         private void CloseCurrentWindow()
         {
-            // Finds and closes the window that has this ViewModel as its DataContext
+            
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.DataContext == this)

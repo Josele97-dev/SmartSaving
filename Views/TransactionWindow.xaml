@@ -11,11 +11,11 @@
 		<ScrollViewer VerticalScrollBarVisibility="Auto">
 			<StackPanel>
 
-				<!-- Form Card -->
+				
 				<Border Background="#334155" CornerRadius="12" Padding="20" Margin="0,0,0,15">
 					<StackPanel>
 
-						<!-- Title -->
+						
 						<TextBlock Text="{Binding Title}"
                                    FontSize="20"
                                    FontWeight="Bold"
@@ -23,7 +23,7 @@
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,15"/>
 
-						<!-- Error Message -->
+						
 						<TextBlock Text="{Binding ErrorMessage}"
                                    Foreground="#FFE74C3C"
                                    FontSize="12"
@@ -32,7 +32,7 @@
                                    Margin="0,0,0,10"
                                    Visibility="Visible"/>
 
-						<!-- Transaction Type -->
+						
 						<TextBlock Text="Transaction Type" Foreground="White" />
 						<ComboBox Margin="0,5,0,10"
                                   Background="#FFECF0F1"
@@ -40,7 +40,7 @@
                                   ItemsSource="{Binding TransactionTypes}"
                                   SelectedItem="{Binding SelectedTransactionType}" />
 
-						<!-- Description -->
+						
 						<TextBlock Text="Description" Foreground="White" />
 						<TextBox Margin="0,5,0,10"
                                  Background="#FFECF0F1"
@@ -48,7 +48,7 @@
                                  IsEnabled="{Binding IsEditableTransaction}"
                                  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
 
-						<!-- Amount -->
+						
 						<TextBlock Text="Amount" Foreground="White" />
                         <TextBox Margin="0,5,0,10"
                          Padding="5"
@@ -69,7 +69,7 @@
                             </TextBox.Style>
                         </TextBox>
 
-                        <!-- Date -->
+                        
 						<TextBlock Text="Date" Foreground="White" />
 						<DatePicker Margin="0,5,0,10"
                                     Background="#FFECF0F1"
@@ -77,7 +77,7 @@
                                     IsEnabled="{Binding IsNotEditing}"
                                     SelectedDate="{Binding Date}" />
 
-						<!-- Category (if categories are available) -->
+						
 						<TextBlock Text="Category" Foreground="White" />
                         <ComboBox Margin="0,5,0,20"
                           Background="#FFECF0F1"
@@ -113,7 +113,7 @@
                         Command="{Binding SaveCommand}"
                         Visibility="{Binding IsExpenseType, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-                        <!-- Save Button -->
+                        
                         <Button Content="Save Transaction"
                         Height="35"
                         Margin="0,20,0,0"
@@ -126,7 +126,7 @@
                     </StackPanel>
 				</Border>
 
-				<!-- Transaction History -->
+				
 				<TextBlock Text="Transaction History"
                            Foreground="White"
                            FontSize="16"
@@ -179,7 +179,7 @@
 					</Grid>
 				</Border>
 
-				<!-- Refresh Button -->
+				
 				<Button Content="Refresh"
                         Height="30"
                         Margin="0,10,0,0"

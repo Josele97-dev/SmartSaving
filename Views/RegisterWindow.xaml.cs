@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace SmartSaving.Views
 {
 
-    /// Lógica de interacción para RegisterWindow.xaml
+    
 
     public partial class RegisterWindow : Window
     {

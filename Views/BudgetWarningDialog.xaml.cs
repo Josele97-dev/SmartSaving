@@ -25,7 +25,7 @@ namespace SmartSaving.Views
         {
             Result = BudgetWarningResult.Proceed;
 
-            // Swap content
+            
             WarningContent.Visibility = Visibility.Collapsed;
             SuccessContent.Visibility = Visibility.Visible;
 

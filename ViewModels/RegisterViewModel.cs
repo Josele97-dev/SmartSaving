@@ -110,7 +110,7 @@ namespace SmartSaving.ViewModels
                     return;
                 }
 
-                // Registration successful — go back to login
+                
                 _navigationService.OpenLoginWindow();
                 CloseCurrentWindow();
             }

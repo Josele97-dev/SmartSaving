@@ -20,7 +20,7 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,10"/>
 
-                    <!-- Title -->
+                    
                     <TextBlock Text="Welcome!"
                                FontSize="24"
                                FontWeight="Bold"
@@ -28,7 +28,7 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,20"/>
 
-                    <!-- Error Message -->
+                    
                     <TextBlock Text="{Binding ErrorMessage}"
                                Foreground="#FFE74C3C"
                                FontSize="12"
@@ -58,7 +58,7 @@
                             FontWeight="Bold"
                             Command="{Binding LoginCommand}" />
 
-                    <!-- Create account link -->
+                    
                     <TextBlock Text="Create account"
                                Foreground="White"
                                HorizontalAlignment="Center"

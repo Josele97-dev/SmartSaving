@@ -37,11 +37,11 @@ namespace SmartSaving.Models
         public bool IsRead { get; set; } = true;
 
 
-        // Navigation properties
+        
         public Account Account { get; set; } = null!;
         public Category Category { get; set; } = null!;
 
-        // Convenience property — type is determined by the Category
+        
         [NotMapped]
         public TransactionType Type => Category?.Type ?? TransactionType.Expense;
     }

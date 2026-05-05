@@ -11,7 +11,7 @@
     <Grid Margin="0">
         <StackPanel Background="#334155">
             
-            <!-- Confirm content -->
+            
             <StackPanel x:Name="ConfirmContent" Background="Transparent">
                 <TextBlock Text="Confirm Transfer"
                            FontSize="18"
@@ -68,7 +68,7 @@
                 </Button>
             </StackPanel>
 
-            <!-- Success content -->
+            
             <StackPanel x:Name="SuccessContent" Visibility="Collapsed" Background="Transparent">
                 <TextBlock Text="✓ Transfer Successful!"
                            FontSize="18"

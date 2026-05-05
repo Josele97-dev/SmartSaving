@@ -12,7 +12,7 @@
 			<Border Background="#FF34495E" CornerRadius="10" Padding="20">
 				<StackPanel VerticalAlignment="Center">
 
-					<!-- Title -->
+					
 					<TextBlock Text="Create account"
                                FontSize="24"
                                FontWeight="Bold"
@@ -27,7 +27,7 @@
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,10"/>
 
-                    <!-- Error Message -->
+                    
 					<TextBlock Text="{Binding ErrorMessage}"
                                Foreground="#FFE74C3C"
                                FontSize="12"
@@ -36,35 +36,35 @@
                                Margin="0,0,0,10"
                                Visibility="Visible"/>
 
-					<!-- First Name -->
+					
 					<TextBlock Text="First Name" Foreground="White" />
 					<TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,5,0,10"
                              Padding="5"
                              Background="#FFECF0F1"/>
 
-					<!-- Last Name -->
+					
 					<TextBlock Text="Last Name" Foreground="White" />
 					<TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,5,0,10"
                              Padding="5"
                              Background="#FFECF0F1"/>
 
-					<!-- Email -->
+					
 					<TextBlock Text="Email" Foreground="White" />
 					<TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,5,0,10"
                              Padding="5"
                              Background="#FFECF0F1"/>
 
-					<!-- Password -->
+					
 					<TextBlock Text="Password" Foreground="White" />
 					<PasswordBox Margin="0,5,0,10"
                                  Padding="5"
                                  Background="#FFECF0F1"
                                  PasswordChanged="PasswordBox_PasswordChanged"/>
 
-					<!-- Confirm Password -->
+					
 					<TextBlock Text="Confirm Password" Foreground="White" />
 					<PasswordBox Margin="0,5,0,20"
                                  Padding="5"
@@ -78,7 +78,7 @@
                             FontWeight="Bold"
                             Command="{Binding RegisterCommand}" />
 
-					<!-- Back to Login link -->
+					
 					<TextBlock Text="Back to Login"
                                Foreground="White"
                                HorizontalAlignment="Center"

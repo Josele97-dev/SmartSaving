@@ -17,7 +17,7 @@ namespace SmartSaving.ViewModels
         private readonly User _currentUser;
         private readonly INavigationService _navigationService;
 
-        // ---- Search fields ----
+        
 
         private string _keyword = string.Empty;
         public string Keyword
@@ -79,7 +79,7 @@ namespace SmartSaving.ViewModels
 
         private int _openTransactionCount = 0;
 
-        // ---- Collections ----
+        
 
         public List<string> TransactionTypes { get; } = new List<string> { "All", "Income", "Expense" };
 
@@ -106,7 +106,7 @@ namespace SmartSaving.ViewModels
         }
 
 
-        // ---- Commands ----
+        
 
         public ICommand SearchCommand { get; }
 
@@ -122,7 +122,7 @@ namespace SmartSaving.ViewModels
             OpenTransactionCommand = new RelayCommand(OpenTransaction);
 
             EventAggregator.TransactionWindowClosed += OnTransactionWindowClosed;
-            // Load categories for the dropdown
+            
             LoadCategories();
         }
 
@@ -131,7 +131,7 @@ namespace SmartSaving.ViewModels
             var defaultAccount = _currentUser.Accounts?.FirstOrDefault();
             if (defaultAccount?.Categories != null)
             {
-                // Add an "All Categories" option at the top
+                
                 var allCategories = new ObservableCollection<Category>();
                 allCategories.Add(new Category { Id = 0, Title = "All Categories" });
                 foreach (var cat in defaultAccount.Categories)
@@ -198,7 +198,7 @@ namespace SmartSaving.ViewModels
             if (_openTransactionCount > 0)
                 _openTransactionCount--;
 
-            // Reopen search window if it was closed and count dropped below 3
+            
             if (_openTransactionCount < 3)
                 ReopenAction?.Invoke();
         }

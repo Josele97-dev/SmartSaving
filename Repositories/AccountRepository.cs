@@ -23,7 +23,7 @@ namespace SmartSaving.Repositories
         {
             using (var context = new AppDbContext())
             {
-                // Returns the first account for this user (the "default" account)
+                
                 return await context.Accounts
                     .Include(a => a.Categories)
                     .FirstOrDefaultAsync(a => a.UserId == userId);
