@@ -37,6 +37,7 @@
 						<ComboBox Margin="0,5,0,10"
                                   Background="#FFECF0F1"
                                   Padding="5"
+                                  IsEnabled="{Binding IsNotEditing}"
                                   ItemsSource="{Binding TransactionTypes}"
                                   SelectedItem="{Binding SelectedTransactionType}" />
 
@@ -45,7 +46,7 @@
 						<TextBox Margin="0,5,0,10"
                                  Background="#FFECF0F1"
                                  Padding="5"
-                                 IsEnabled="{Binding IsEditableTransaction}"
+                                 IsEnabled="{Binding IsDescriptionEditable}"
                                  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
 
 						
@@ -121,7 +122,7 @@
                         Foreground="White"
                         FontWeight="Bold"
                         Command="{Binding SaveCommand}"
-                        Visibility="{Binding IsEditableTransaction, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Visibility="{Binding IsDescriptionEditable, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     </StackPanel>
 				</Border>

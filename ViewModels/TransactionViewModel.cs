@@ -138,7 +138,7 @@ namespace SmartSaving.ViewModels
 
         public bool IsExpenseType => SelectedTransactionType == "Expense";
 
-        
+        public bool IsDescriptionEditable => true;
 
         public bool IsEditing => _existingTransaction != null;
         public string Title => IsEditing ? "Edit Transaction" : "New Transaction";
