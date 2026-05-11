@@ -54,7 +54,7 @@
                         <TextBox Margin="0,5,0,10"
                          Padding="5"
                          IsEnabled="{Binding IsNotEditing}"
-                         Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged,ConverterCulture=en-US,TargetNullValue=0, FallbackValue=0}">
+                         Text="{Binding Amount, UpdateSourceTrigger=LostFocus,Converter={StaticResource DecimalInputConverter}}">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="Background" Value="#FFECF0F1"/>

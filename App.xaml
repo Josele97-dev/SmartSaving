@@ -8,6 +8,7 @@
         <utils:PercentageToWidthConverter x:Key="PercentageToWidthConverter"/>
 		<utils:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <utils:TransactionAmountConverter x:Key="TransactionAmountConverter"/>
+        <utils:DecimalInputConverter x:Key="DecimalInputConverter"/>
         
     </Application.Resources>
 </Application>
