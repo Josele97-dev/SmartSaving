@@ -18,7 +18,13 @@ namespace SmartSaving.Utils
             if (value is string s)
             {
                 if (string.IsNullOrWhiteSpace(s)) return 0m;
-                s = s.Replace(",", ".");
+
+                s = s.Replace(",", ".").Trim();
+
+                // Strictly reject anything that isn't purely digits with optional single decimal point
+                if (!System.Text.RegularExpressions.Regex.IsMatch(s, @"^[0-9]+(\.[0-9]+)?$"))
+                    return 0m;
+
                 if (decimal.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result))
                     return result;
             }

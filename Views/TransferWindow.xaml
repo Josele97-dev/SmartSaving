@@ -74,9 +74,11 @@
 
                         <TextBlock Text="Amount" Foreground="White" Margin="0,0,0,4"/>
                         <TextBox Background="#FFECF0F1"
-                                 Padding="5"
-                                 Margin="0,0,0,15"
-                                 Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"/>
+                        Padding="5"
+                        Margin="0,0,0,15"
+                         Text="{Binding Amount, 
+                            UpdateSourceTrigger=LostFocus,
+                            Converter={StaticResource DecimalInputConverter}}"/>
 
                         <TextBlock Text="Description (optional)" Foreground="White" Margin="0,0,0,4"/>
                         <TextBox Background="#FFECF0F1"
